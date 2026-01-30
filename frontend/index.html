@@ -546,6 +546,45 @@
             color: var(--gray-600);
         }
 
+        .kpi-chart {
+            margin-top: var(--space-md);
+            display: grid;
+            gap: var(--space-sm);
+        }
+
+        .kpi-chart-row {
+            display: grid;
+            grid-template-columns: 72px 1fr auto;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        .kpi-chart-label {
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .kpi-chart-bar {
+            height: 8px;
+            border-radius: 999px;
+            background: var(--gray-200);
+            overflow: hidden;
+        }
+
+        .kpi-chart-bar span {
+            display: block;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--green-felt) 0%, var(--gold) 100%);
+        }
+
+        .kpi-chart-value {
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
         /* Top 3 styling */
         .top-players {
             display: flex;
@@ -1306,6 +1345,7 @@
 
         const API_BASE = 'http://localhost:3000/api/players';
         const MATCHES_API_BASE = 'http://localhost:3000/api/matches';
+        const KPI_API_BASE = 'http://localhost:3000/api/kpis';
         let players = [];
         let matches = [];
         let scoresState = {
@@ -1316,105 +1356,12 @@
             filterPlayerId: null
         };
 
-        /**
-         * Sessions passées avec scores
-         * teamA et teamB contiennent les IDs des joueurs
-         * scoreA et scoreB sont les scores finaux
-         */
-        const pastSessions = [
-            {
-                id: 1,
-                date: "2025-01-25",
-                teamA: [1, 2],
-                teamB: [3, 4],
-                scoreA: 1020,
-                scoreB: 890
-            },
-            {
-                id: 2,
-                date: "2025-01-18",
-                teamA: [5, 6],
-                teamB: [7, 8],
-                scoreA: 750,
-                scoreB: 1150
-            },
-            {
-                id: 3,
-                date: "2025-01-11",
-                teamA: [9, 10],
-                teamB: [11, 12],
-                scoreA: 980,
-                scoreB: 920
-            },
-            {
-                id: 4,
-                date: "2025-01-04",
-                teamA: [1, 5],
-                teamB: [2, 6],
-                scoreA: 1100,
-                scoreB: 850
-            },
-            {
-                id: 5,
-                date: "2024-12-28",
-                teamA: [3, 7],
-                teamB: [4, 8],
-                scoreA: 890,
-                scoreB: 1050
-            },
-            {
-                id: 6,
-                date: "2024-12-21",
-                teamA: [9, 1],
-                teamB: [10, 2],
-                scoreA: 1200,
-                scoreB: 780
-            },
-            {
-                id: 7,
-                date: "2024-12-14",
-                teamA: [11, 3],
-                teamB: [12, 4],
-                scoreA: 950,
-                scoreB: 1080
-            },
-            {
-                id: 8,
-                date: "2024-12-07",
-                teamA: [5, 9],
-                teamB: [6, 10],
-                scoreA: 1010,
-                scoreB: 990
-            }
-        ];
-
-        /**
-         * Sessions à venir
-         * participants contient les IDs des joueurs inscrits
-         */
-        const upcomingSessions = [
-            {
-                id: 101,
-                date: "2025-02-01",
-                time: "20:00",
-                location: "Café du Commerce, Suresnes",
-                participants: [1, 2, 3, 4, 5, 6]
-            },
-            {
-                id: 102,
-                date: "2025-02-08",
-                time: "19:30",
-                location: "Chez Jean-Pierre",
-                participants: [1, 7, 8, 9]
-            },
-            {
-                id: 103,
-                date: "2025-02-15",
-                time: "20:00",
-                location: "Salle municipale",
-                participants: [2, 4, 10, 11, 12]
-            }
-        ];
+        let kpiState = {
+            totals: null,
+            matchesByMonth: [],
+            topWinners: [],
+            topScorer: null
+        };
 
         // ==========================================================================
         // FONCTIONS UTILITAIRES
@@ -1479,23 +1426,26 @@
             let totalPoints = 0;
             const recentResults = [];
 
-            pastSessions.forEach(session => {
-                const inTeamA = session.teamA.includes(playerId);
-                const inTeamB = session.teamB.includes(playerId);
+            matches.forEach(match => {
+                const hasRounds = match.rounds && match.rounds.length > 0;
+                if (!hasRounds) return;
 
-                if (inTeamA || inTeamB) {
-                    games++;
-                    const playerPoints = inTeamA ? session.scoreA : session.scoreB;
-                    const opponentPoints = inTeamA ? session.scoreB : session.scoreA;
-                    totalPoints += playerPoints;
+                const totals = summarizeRounds(match.rounds);
+                const inTeam1 = match.team1?.p1?.id === playerId || match.team1?.p2?.id === playerId;
+                const inTeam2 = match.team2?.p1?.id === playerId || match.team2?.p2?.id === playerId;
 
-                    const won = playerPoints > opponentPoints;
-                    if (won) wins++;
+                if (!inTeam1 && !inTeam2) return;
 
-                    // Garder les 5 derniers résultats
-                    if (recentResults.length < 5) {
-                        recentResults.push(won ? 'W' : 'L');
-                    }
+                games += 1;
+                const playerPoints = inTeam1 ? totals.team1 : totals.team2;
+                const opponentPoints = inTeam1 ? totals.team2 : totals.team1;
+                totalPoints += playerPoints;
+
+                const won = playerPoints > opponentPoints;
+                if (won) wins += 1;
+
+                if (recentResults.length < 5) {
+                    recentResults.push(won ? 'W' : 'L');
                 }
             });
 
@@ -1610,6 +1560,18 @@
 
             if (!response.ok || !payload.success) {
                 const message = payload?.error?.message || 'Erreur lors du chargement des parties jouées.';
+                throw new Error(message);
+            }
+
+            return payload.data;
+        }
+
+        async function fetchKpis() {
+            const response = await fetch(KPI_API_BASE);
+            const payload = await response.json();
+
+            if (!response.ok || !payload.success) {
+                const message = payload?.error?.message || 'Erreur lors du chargement des KPIs.';
                 throw new Error(message);
             }
 
@@ -1868,91 +1830,92 @@
         function renderKPIs() {
             const grid = document.getElementById('kpiGrid');
 
-            if (players.length === 0) {
-                grid.innerHTML = `
-                    <div class="kpi-card">
-                        <div class="kpi-title">📊 Statistiques du club</div>
-                        <div class="kpi-value">0</div>
-                        <div class="kpi-subtitle">Aucun joueur enregistré</div>
-                    </div>
-                `;
+            grid.innerHTML = `
+                <div class="kpi-card">
+                    <div class="kpi-title">📊 Statistiques du club</div>
+                    <div class="kpi-value">—</div>
+                    <div class="kpi-subtitle">Chargement des KPIs...</div>
+                </div>
+            `;
+
+            if (!kpiState?.totals) {
                 return;
             }
 
-            // Calculer les stats pour tous les joueurs
-            const allStats = players.map(player => ({
-                ...player,
-                ...calculatePlayerStats(player.id)
-            }));
-
-            // Top 3 (par taux de victoire, puis points moyens)
-            const top3 = allStats
-                .filter(p => p.games >= 2) // Au moins 2 parties
-                .sort((a, b) => {
-                    if (b.winRate !== a.winRate) return b.winRate - a.winRate;
-                    return b.avgPoints - a.avgPoints;
-                })
-                .slice(0, 3);
-
-            // Joueur le plus actif
-            const mostActive = allStats.reduce((max, p) =>
-                p.games > max.games ? p : max
-            , allStats[0]);
-
-            // Forme récente du joueur avec le plus de parties récentes
-            const recentFormPlayer = allStats
-                .filter(p => p.recentResults.length >= 3)
-                .sort((a, b) => b.games - a.games)[0];
+            const { totals, matchesByMonth, topWinners, topScorer } = kpiState;
+            const maxMatches = Math.max(...matchesByMonth.map(item => item.total_matches), 0);
 
             grid.innerHTML = `
-                <!-- Top 3 -->
-                <div class="kpi-card">
-                    <div class="kpi-title">🏆 Top 3 joueurs</div>
-                    <div class="top-players">
-                        ${top3.map((player, index) => `
-                            <div class="top-player">
-                                <div class="rank rank-${index + 1}">${index + 1}</div>
-                                <div class="player-info">
-                                    <div class="player-name">${getDisplayName(player)}</div>
-                                    <div class="player-stats">${player.winRate}% de victoires • ${player.avgPoints} pts/partie</div>
-                                </div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-
-                <!-- Joueur le plus actif -->
-                <div class="kpi-card">
-                    <div class="kpi-title">🎯 Joueur le plus actif</div>
-                    <div class="kpi-value">${getDisplayName(mostActive)}</div>
-                    <div class="kpi-subtitle">${mostActive.games} parties jouées</div>
-                </div>
-
-                <!-- Forme récente -->
-                <div class="kpi-card">
-                    <div class="kpi-title">📈 Forme récente</div>
-                    <div class="kpi-value">${recentFormPlayer ? getDisplayName(recentFormPlayer) : '-'}</div>
-                    ${recentFormPlayer ? `
-                        <div class="kpi-subtitle">5 derniers résultats :</div>
-                        <div class="form-indicator">
-                            ${recentFormPlayer.recentResults.map(r => `
-                                <span class="form-dot ${r === 'W' ? 'form-win' : 'form-loss'}">${r}</span>
-                            `).join('')}
-                        </div>
-                    ` : '<div class="kpi-subtitle">Pas assez de données</div>'}
-                </div>
-
-                <!-- Stats globales -->
                 <div class="kpi-card">
                     <div class="kpi-title">📊 Statistiques du club</div>
-                    <div class="kpi-value">${pastSessions.length}</div>
+                    <div class="kpi-value">${totals.matches}</div>
                     <div class="kpi-subtitle">parties jouées au total</div>
                     <div style="margin-top: var(--space-md); font-size: 0.9rem; color: var(--gray-600);">
-                        ${players.length} joueurs inscrits<br>
-                        ${upcomingSessions.length} sessions à venir
+                        ${totals.players} joueurs inscrits<br>
+                        ${totals.points} points cumulés
                     </div>
                 </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-title">🏆 Top 3 joueurs (victoires)</div>
+                    ${topWinners.length ? `
+                        <div class="top-players">
+                            ${topWinners.map((entry, index) => `
+                                <div class="top-player">
+                                    <div class="rank rank-${index + 1}">${index + 1}</div>
+                                    <div class="player-info">
+                                        <div class="player-name">${getDisplayName(entry.player)}</div>
+                                        <div class="player-stats">${entry.wins} victoires</div>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : '<div class="kpi-subtitle">Aucune victoire enregistrée</div>'}
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-title">🔥 Meilleur score cumulé</div>
+                    ${topScorer ? `
+                        <div class="kpi-value">${getDisplayName(topScorer.player)}</div>
+                        <div class="kpi-subtitle">${topScorer.points} points cumulés</div>
+                    ` : '<div class="kpi-subtitle">Aucun score enregistré</div>'}
+                </div>
+
+                <div class="kpi-card">
+                    <div class="kpi-title">📅 Parties jouées par mois</div>
+                    ${matchesByMonth.length ? `
+                        <div class="kpi-chart">
+                            ${matchesByMonth.map(item => {
+                                const ratio = maxMatches > 0 ? Math.round((item.total_matches / maxMatches) * 100) : 0;
+                                return `
+                                    <div class="kpi-chart-row">
+                                        <div class="kpi-chart-label">${item.month}</div>
+                                        <div class="kpi-chart-bar"><span style="width: ${ratio}%"></span></div>
+                                        <div class="kpi-chart-value">${item.total_matches}</div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    ` : '<div class="kpi-subtitle">Aucune partie jouée</div>'}
+                </div>
             `;
+        }
+
+        async function loadKpis() {
+            try {
+                const data = await fetchKpis();
+                kpiState = data;
+                renderKPIs();
+            } catch (error) {
+                const grid = document.getElementById('kpiGrid');
+                grid.innerHTML = `
+                    <div class="kpi-card">
+                        <div class="kpi-title">📊 Statistiques du club</div>
+                        <div class="kpi-value">—</div>
+                        <div class="kpi-subtitle">${error.message || 'Impossible de charger les KPIs.'}</div>
+                    </div>
+                `;
+            }
         }
 
         function getMatchTeamLabel(team) {
@@ -2259,7 +2222,6 @@
                 const filter = document.getElementById('searchPlayers').value;
                 renderPlayersTable(filter, currentSort.key, currentSort.dir);
                 populatePlayerFilter();
-                renderKPIs();
                 populateMatchSelects();
             } catch (error) {
                 showToast(error.message || 'Impossible de charger les joueurs.');
@@ -2575,6 +2537,7 @@
             await loadPlayers();
             await loadMatches();
             await loadScores();
+            await loadKpis();
 
             setupTableSort();
             setupSearch();

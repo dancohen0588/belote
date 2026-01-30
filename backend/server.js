@@ -3,6 +3,7 @@ const cors = require('cors');
 
 const playersRouter = require('./routes/players');
 const matchesRouter = require('./routes/matches');
+const kpisRouter = require('./routes/kpis');
 
 const app = express();
 const PORT = 3000;
@@ -12,6 +13,7 @@ app.use(express.json());
 
 app.use('/api/players', playersRouter);
 app.use('/api/matches', matchesRouter);
+app.use('/api/kpis', kpisRouter);
 
 app.use((req, res) => {
   res.status(404).json({

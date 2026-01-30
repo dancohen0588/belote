@@ -68,6 +68,10 @@ En cas d'erreur :
 - `PUT /api/players/:id`
 - `DELETE /api/players/:id`
 
+#### KPI
+
+- `GET /api/kpis`
+
 #### Parties (matches)
 
 - `GET /api/matches`
@@ -87,6 +91,35 @@ En cas d'erreur :
   "last_name": "Dupont",
   "email": "jean.dupont@example.com",
   "phone": "0601020304"
+}
+```
+
+### Exemple de réponse (GET /api/kpis)
+
+```json
+{
+  "success": true,
+  "data": {
+    "totals": {
+      "players": 12,
+      "matches": 24,
+      "points": 18940
+    },
+    "matchesByMonth": [
+      { "month": "01/2025", "total_matches": 4 },
+      { "month": "02/2025", "total_matches": 6 }
+    ],
+    "topWinners": [
+      {
+        "player": { "id": 3, "first_name": "Alice", "last_name": "Martin" },
+        "wins": 7
+      }
+    ],
+    "topScorer": {
+      "player": { "id": 5, "first_name": "Jean", "last_name": "Dupont" },
+      "points": 3420
+    }
+  }
 }
 ```
 
