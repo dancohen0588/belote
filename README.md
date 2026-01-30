@@ -64,6 +64,7 @@ En cas d'erreur :
 
 - `GET /api/players`
 - `GET /api/players/:id`
+- `GET /api/players/stats?q=marie`
 - `POST /api/players`
 - `PUT /api/players/:id`
 - `DELETE /api/players/:id`
@@ -82,6 +83,14 @@ En cas d'erreur :
 - `DELETE /api/matches/:id`
 - `POST /api/matches/:id/rounds`
 - `DELETE /api/matches/:id/rounds`
+
+#### Joueurs (statistiques)
+
+- `GET /api/players/stats`
+
+Paramètres :
+
+- `q` : recherche (prénom, nom, email)
 
 ### Exemple de payload (POST/PUT)
 
@@ -121,6 +130,40 @@ En cas d'erreur :
     }
   }
 }
+
+### Exemple de réponse (GET /api/players/stats)
+
+```json
+{
+  "success": true,
+  "data": {
+    "items": [
+      {
+        "id": 5,
+        "first_name": "Jean",
+        "last_name": "Dupont",
+        "email": "jean.dupont@example.com",
+        "phone": "0601020304",
+        "name": "Jean Dupont",
+        "games": 12,
+        "wins": 7,
+        "winRate": 58,
+        "avgRoundPoints": 86.5,
+        "recentForm": {
+          "results": ["W", "L", "W"],
+          "wins": 2,
+          "losses": 1
+        }
+      }
+    ],
+    "pagination": {
+      "total": 1,
+      "limit": 50,
+      "offset": 0
+    }
+  }
+}
+```
 ```
 
 ## Base de données

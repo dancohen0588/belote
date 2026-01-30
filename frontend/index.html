@@ -663,6 +663,18 @@
             color: white;
         }
 
+        .form-dot.sm {
+            width: 18px;
+            height: 18px;
+            font-size: 0.6rem;
+        }
+
+        .form-dot.empty {
+            background: var(--gray-200);
+            color: var(--gray-400);
+            border: 1px dashed var(--gray-300);
+        }
+
         .form-win {
             background: var(--success);
         }
@@ -1133,7 +1145,8 @@
                             <th data-sort="games" class="text-center">Parties</th>
                             <th data-sort="wins" class="text-center">Victoires</th>
                             <th data-sort="winRate" class="text-center">Taux</th>
-                            <th data-sort="avgPoints" class="text-center">Pts moy.</th>
+                            <th data-sort="avgRoundPoints" class="text-center">Points moyens</th>
+                            <th data-sort="recentForm" class="text-center">Forme récente</th>
                             <th class="text-right">Actions</th>
                         </tr>
                     </thead>
@@ -1344,9 +1357,11 @@
         // ==========================================================================
 
         const API_BASE = 'http://localhost:3000/api/players';
+        const PLAYER_STATS_API_BASE = 'http://localhost:3000/api/players/stats';
         const MATCHES_API_BASE = 'http://localhost:3000/api/matches';
         const KPI_API_BASE = 'http://localhost:3000/api/kpis';
         let players = [];
+        let playersStats = [];
         let matches = [];
         let scoresState = {
             items: [],
@@ -1417,45 +1432,38 @@
             return new Date(date.getTime() - tzOffset).toISOString().slice(0, 16);
         }
 
-        /**
-         * Calcule les statistiques d'un joueur
-         */
-        function calculatePlayerStats(playerId) {
-            let games = 0;
-            let wins = 0;
-            let totalPoints = 0;
-            const recentResults = [];
+        async function fetchPlayersStats(query = '') {
+            const params = new URLSearchParams();
+            if (query) {
+                params.set('q', query);
+            }
+            const url = params.toString() ? `${PLAYER_STATS_API_BASE}?${params.toString()}` : PLAYER_STATS_API_BASE;
+            const response = await fetch(url);
+            const payload = await response.json();
 
-            matches.forEach(match => {
-                const hasRounds = match.rounds && match.rounds.length > 0;
-                if (!hasRounds) return;
+            if (!response.ok || !payload.success) {
+                const message = payload?.error?.message || 'Erreur lors du chargement des statistiques joueurs.';
+                throw new Error(message);
+            }
 
-                const totals = summarizeRounds(match.rounds);
-                const inTeam1 = match.team1?.p1?.id === playerId || match.team1?.p2?.id === playerId;
-                const inTeam2 = match.team2?.p1?.id === playerId || match.team2?.p2?.id === playerId;
-
-                if (!inTeam1 && !inTeam2) return;
-
-                games += 1;
-                const playerPoints = inTeam1 ? totals.team1 : totals.team2;
-                const opponentPoints = inTeam1 ? totals.team2 : totals.team1;
-                totalPoints += playerPoints;
-
-                const won = playerPoints > opponentPoints;
-                if (won) wins += 1;
-
-                if (recentResults.length < 5) {
-                    recentResults.push(won ? 'W' : 'L');
-                }
+            playersStats = (payload.data?.items || []).map((item) => {
+                const normalized = normalizePlayer(item);
+                const stats = item?.stats || {};
+                return {
+                    ...normalized,
+                    games: Number(stats.playedMatches) || 0,
+                    wins: Number(stats.wins) || 0,
+                    winRate: Number(stats.winRate) || 0,
+                    avgRoundPoints: stats.avgRoundPoints === null || stats.avgRoundPoints === undefined
+                        ? null
+                        : Number(stats.avgRoundPoints),
+                    recentForm: {
+                        results: Array.isArray(stats.recentForm) ? stats.recentForm : [],
+                        wins: Array.isArray(stats.recentForm) ? stats.recentForm.filter(r => r === 'W').length : 0,
+                        losses: Array.isArray(stats.recentForm) ? stats.recentForm.filter(r => r === 'L').length : 0
+                    }
+                };
             });
-
-            return {
-                games,
-                wins,
-                winRate: games > 0 ? Math.round((wins / games) * 100) : 0,
-                avgPoints: games > 0 ? Math.round(totalPoints / games) : 0,
-                recentResults
-            };
         }
 
         /**
@@ -1627,16 +1635,8 @@
         function renderPlayersTable(filter = '', sortKey = 'winRate', sortDir = 'desc') {
             const tbody = document.getElementById('playersBody');
 
-            // Calculer les stats pour chaque joueur
-            let playersWithStats = players.map(player => {
-                const stats = calculatePlayerStats(player.id);
-                return {
-                    ...player,
-                    ...stats
-                };
-            });
+            let playersWithStats = [...playersStats];
 
-            // Filtrer
             if (filter) {
                 const lowerFilter = filter.toLowerCase();
                 playersWithStats = playersWithStats.filter(p =>
@@ -1645,27 +1645,39 @@
                 );
             }
 
-            // Trier
+            const normalizeNumber = (value) => (Number.isFinite(value) ? value : 0);
+            const getSortValue = (item) => {
+                switch (sortKey) {
+                case 'name':
+                    return item.name.toLowerCase();
+                case 'games':
+                    return normalizeNumber(item.games);
+                case 'wins':
+                    return normalizeNumber(item.wins);
+                case 'winRate':
+                    return normalizeNumber(item.winRate);
+                case 'avgRoundPoints':
+                    return item.avgRoundPoints === null ? -1 : normalizeNumber(item.avgRoundPoints);
+                case 'recentForm':
+                    return normalizeNumber(item.recentForm?.wins || 0);
+                default:
+                    return normalizeNumber(item[sortKey]);
+                }
+            };
+
             playersWithStats.sort((a, b) => {
-                let valA = a[sortKey];
-                let valB = b[sortKey];
-
-                if (typeof valA === 'string') {
-                    valA = valA.toLowerCase();
-                    valB = valB.toLowerCase();
+                const valA = getSortValue(a);
+                const valB = getSortValue(b);
+                if (valA === valB) {
+                    return a.name.localeCompare(b.name);
                 }
-
-                if (sortDir === 'asc') {
-                    return valA > valB ? 1 : -1;
-                } else {
-                    return valA < valB ? 1 : -1;
-                }
+                return sortDir === 'asc' ? (valA > valB ? 1 : -1) : (valA < valB ? 1 : -1);
             });
 
             if (playersWithStats.length === 0) {
                 tbody.innerHTML = `
                     <tr>
-                        <td colspan="6" class="text-center">Aucun joueur pour le moment.</td>
+                        <td colspan="7" class="text-center">Aucun joueur pour le moment.</td>
                     </tr>
                 `;
                 return;
@@ -1678,12 +1690,24 @@
                         <strong>${player.name}</strong>
                         ${player.pseudo ? `<span style="color: var(--gray-400);"> (${player.pseudo})</span>` : ''}
                     </td>
-                    <td class="text-center">${player.games}</td>
-                    <td class="text-center">${player.wins}</td>
+                    <td class="text-center">${player.games ?? 0}</td>
+                    <td class="text-center">${player.wins ?? 0}</td>
                     <td class="text-center">
-                        <span class="win-rate ${getWinRateClass(player.winRate)}">${player.winRate}%</span>
+                        <span class="win-rate ${getWinRateClass(player.winRate ?? 0)}">${player.winRate ?? 0}%</span>
                     </td>
-                    <td class="text-center">${player.avgPoints}</td>
+                    <td class="text-center">${player.avgRoundPoints === null ? '—' : player.avgRoundPoints}</td>
+                    <td class="text-center">
+                        <div class="form-indicator" aria-label="Forme récente">
+                            ${(player.recentForm?.results || []).map((result, index) => {
+                                const isWin = result === 'W';
+                                const title = isWin ? 'Victoire' : 'Défaite';
+                                return `<span class="form-dot sm ${isWin ? 'form-win' : 'form-loss'}" title="${title} #${index + 1}">${result}</span>`;
+                            }).join('')}
+                            ${Array.from({ length: Math.max(0, 5 - (player.recentForm?.results || []).length) }).map(() => (
+                                '<span class="form-dot sm empty" title="Aucun résultat">•</span>'
+                            )).join('')}
+                        </div>
+                    </td>
                     <td class="actions-cell">
                         <button class="icon-btn" data-action="edit" title="Modifier">✏️</button>
                         <button class="icon-btn" data-action="delete" title="Supprimer">🗑</button>
@@ -2062,7 +2086,12 @@
             const searchInput = document.getElementById('searchPlayers');
 
             searchInput.addEventListener('input', (e) => {
-                renderPlayersTable(e.target.value, currentSort.key, currentSort.dir);
+                const value = e.target.value;
+                fetchPlayersStats(value)
+                    .then(() => renderPlayersTable(value, currentSort.key, currentSort.dir))
+                    .catch((error) => {
+                        showToast(error.message || 'Impossible de charger les statistiques joueurs.');
+                    });
             });
         }
 
@@ -2220,6 +2249,7 @@
             try {
                 await fetchPlayers();
                 const filter = document.getElementById('searchPlayers').value;
+                await fetchPlayersStats(filter);
                 renderPlayersTable(filter, currentSort.key, currentSort.dir);
                 populatePlayerFilter();
                 populateMatchSelects();
