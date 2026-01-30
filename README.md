@@ -1,6 +1,6 @@
 # Belote Suresnes — Gestion des joueurs
 
-Projet local **Node.js / Express / SQLite** avec un front **HTML/CSS/JS vanilla**.
+Projet **Node.js / Express / Postgres** avec un front **HTML/CSS/JS vanilla**.
 
 ## Arborescence
 
@@ -110,13 +110,12 @@ Paramètres :
   "success": true,
   "data": {
     "totals": {
-      "players": 12,
       "matches": 24,
-      "points": 18940
+      "rounds": 72
     },
     "matchesByMonth": [
-      { "month": "01/2025", "total_matches": 4 },
-      { "month": "02/2025", "total_matches": 6 }
+      { "month": "2025-01", "total_matches": 4 },
+      { "month": "2025-02", "total_matches": 6 }
     ],
     "topWinners": [
       {
@@ -144,15 +143,12 @@ Paramètres :
         "last_name": "Dupont",
         "email": "jean.dupont@example.com",
         "phone": "0601020304",
-        "name": "Jean Dupont",
-        "games": 12,
-        "wins": 7,
-        "winRate": 58,
-        "avgRoundPoints": 86.5,
-        "recentForm": {
-          "results": ["W", "L", "W"],
-          "wins": 2,
-          "losses": 1
+        "stats": {
+          "playedMatches": 12,
+          "wins": 7,
+          "winRate": 58,
+          "avgRoundPoints": 86.5,
+          "recentForm": ["W", "L", "W"]
         }
       }
     ],
@@ -166,7 +162,37 @@ Paramètres :
 ```
 ```
 
-## Base de données
+## Base de données (Supabase Postgres + Render)
 
-SQLite locale : `backend/belote.db`.
-Les tables `players`, `matches` et `match_rounds` sont auto-créées au démarrage si elles n'existent pas.
+### 1) Création du schéma (Supabase)
+
+Dans Supabase > SQL Editor, exécuter le script :
+
+```sql
+-- fichier: backend/data/schema.postgres.sql
+```
+
+### 2) Importer les données SQLite vers Postgres (optionnel)
+
+```bash
+cd backend
+DATABASE_URL="postgresql://..." SQLITE_PATH="./data/belote.db" node ./data/import-sqlite-to-postgres.js
+```
+
+### 3) Variables d'environnement backend
+
+- `DATABASE_URL` : URL Postgres Supabase
+- `PORT` : port d'écoute (Render fournit `PORT` automatiquement)
+
+### 4) Déploiement Render (backend)
+
+1. Créer un **Web Service** Render.
+2. Root Directory : `backend`.
+3. Build Command : `npm install`.
+4. Start Command : `npm start`.
+5. Ajouter la variable `DATABASE_URL` (Supabase).
+6. Déployer.
+
+### 5) Frontend
+
+Mettre à jour les URLs API dans `frontend/index.html` si besoin (API Render).
