@@ -1,0 +1,1848 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belote Suresnes — Club de Belote</title>
+    <style>
+        /* ==========================================================================
+           RESET & BASE
+           ========================================================================== */
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            /* Palette */
+            --green-felt: #1a5f4a;
+            --green-felt-light: #2a7a60;
+            --green-felt-dark: #134a3a;
+            --cream: #faf8f5;
+            --cream-dark: #f0ede8;
+            --gold: #d4a853;
+            --gold-light: #e8c078;
+            --red-card: #c41e3a;
+            --black-card: #1a1a2e;
+            --gray-100: #f7f7f7;
+            --gray-200: #e8e8e8;
+            --gray-300: #d1d1d1;
+            --gray-400: #9a9a9a;
+            --gray-600: #555;
+            --gray-800: #2d2d2d;
+            --success: #2ecc71;
+            --danger: #e74c3c;
+
+            /* Typography */
+            --font-display: 'Georgia', serif;
+            --font-body: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+            /* Spacing */
+            --space-xs: 0.25rem;
+            --space-sm: 0.5rem;
+            --space-md: 1rem;
+            --space-lg: 1.5rem;
+            --space-xl: 2rem;
+            --space-2xl: 3rem;
+            --space-3xl: 4rem;
+
+            /* Border radius */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+
+            /* Transitions */
+            --transition-fast: 150ms ease;
+            --transition-normal: 250ms ease;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--cream);
+            color: var(--gray-800);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        /* ==========================================================================
+           LAYOUT
+           ========================================================================== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+        }
+
+        section {
+            padding: var(--space-3xl) 0;
+        }
+
+        section:nth-child(even) {
+            background: var(--cream-dark);
+        }
+
+        /* ==========================================================================
+           HEADER
+           ========================================================================== */
+        header {
+            background: linear-gradient(135deg, var(--green-felt-dark) 0%, var(--green-felt) 50%, var(--green-felt-light) 100%);
+            color: var(--cream);
+            padding: var(--space-xl) 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: var(--space-lg);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .logo-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--cream);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .logo h1 {
+            font-family: var(--font-display);
+            font-size: 1.75rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .logo .subtitle {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            font-weight: 400;
+            margin-top: 2px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: var(--space-xs);
+        }
+
+        nav a {
+            color: var(--cream);
+            text-decoration: none;
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: background var(--transition-fast);
+        }
+
+        nav a:hover {
+            background: rgba(255,255,255,0.15);
+        }
+
+        /* ==========================================================================
+           TYPOGRAPHY
+           ========================================================================== */
+        .section-title {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--green-felt-dark);
+            margin-bottom: var(--space-sm);
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 1.5em;
+            background: var(--gold);
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            color: var(--gray-400);
+            margin-bottom: var(--space-xl);
+            font-size: 0.95rem;
+        }
+
+        /* ==========================================================================
+           BUTTONS
+           ========================================================================== */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            padding: var(--space-sm) var(--space-lg);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--green-felt);
+            color: white;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--green-felt-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--cream);
+            color: var(--gray-800);
+            border: 1px solid var(--gray-300);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--gray-100);
+            border-color: var(--gray-400);
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+            color: var(--gray-800);
+        }
+
+        .btn-gold:hover:not(:disabled) {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-sm {
+            padding: var(--space-xs) var(--space-md);
+            font-size: 0.8rem;
+        }
+
+        /* ==========================================================================
+           SEARCH & FILTERS
+           ========================================================================== */
+        .search-bar {
+            position: relative;
+            max-width: 320px;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: var(--space-sm) var(--space-md);
+            padding-left: 2.5rem;
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            background: white;
+            transition: all var(--transition-fast);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--green-felt);
+            box-shadow: 0 0 0 3px rgba(26, 95, 74, 0.1);
+        }
+
+        .search-bar::before {
+            content: '🔍';
+            position: absolute;
+            left: var(--space-md);
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.9rem;
+            opacity: 0.5;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: var(--space-md);
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-bar select {
+            padding: var(--space-sm) var(--space-md);
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            font-size: 0.9rem;
+            background: white;
+            cursor: pointer;
+            min-width: 180px;
+        }
+
+        .filter-bar select:focus {
+            outline: none;
+            border-color: var(--green-felt);
+        }
+
+        /* ==========================================================================
+           TABLES
+           ========================================================================== */
+        .table-wrapper {
+            overflow-x: auto;
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: var(--space-md) var(--space-lg);
+            text-align: left;
+        }
+
+        th {
+            background: var(--gray-100);
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            color: var(--gray-600);
+            cursor: pointer;
+            user-select: none;
+            transition: background var(--transition-fast);
+            white-space: nowrap;
+        }
+
+        th:hover {
+            background: var(--gray-200);
+        }
+
+        th.sorted-asc::after,
+        th.sorted-desc::after {
+            margin-left: var(--space-sm);
+            opacity: 0.6;
+        }
+
+        th.sorted-asc::after {
+            content: '↑';
+        }
+
+        th.sorted-desc::after {
+            content: '↓';
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--gray-200);
+            transition: background var(--transition-fast);
+        }
+
+        tbody tr:nth-child(even) {
+            background: var(--gray-100);
+        }
+
+        tbody tr:hover {
+            background: rgba(26, 95, 74, 0.05);
+        }
+
+        tbody tr:last-child {
+            border-bottom: none;
+        }
+
+        td {
+            font-size: 0.95rem;
+        }
+
+        .table-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+            flex-wrap: wrap;
+            gap: var(--space-md);
+        }
+
+        /* ==========================================================================
+           CARDS
+           ========================================================================== */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: var(--space-xl);
+        }
+
+        .card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .card-session {
+            border-left: 4px solid var(--gold);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: var(--space-md);
+        }
+
+        .card-date {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            color: var(--green-felt-dark);
+            font-weight: 600;
+        }
+
+        .card-time {
+            font-size: 0.85rem;
+            color: var(--gray-400);
+            margin-top: 2px;
+        }
+
+        .card-badge {
+            background: var(--green-felt);
+            color: white;
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .card-location {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--gray-600);
+            font-size: 0.9rem;
+            margin-bottom: var(--space-md);
+        }
+
+        .card-participants {
+            margin-bottom: var(--space-lg);
+        }
+
+        .card-participants-label {
+            font-size: 0.8rem;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+            margin-bottom: var(--space-sm);
+        }
+
+        .participants-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+        }
+
+        .participant-tag {
+            background: var(--cream);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            color: var(--gray-800);
+        }
+
+        .card-actions {
+            display: flex;
+            gap: var(--space-sm);
+        }
+
+        /* ==========================================================================
+           KPI CARDS
+           ========================================================================== */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-xl);
+        }
+
+        .kpi-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--green-felt) 0%, var(--gold) 100%);
+        }
+
+        .kpi-title {
+            font-size: 0.85rem;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: var(--space-md);
+        }
+
+        .kpi-value {
+            font-family: var(--font-display);
+            font-size: 2rem;
+            color: var(--green-felt-dark);
+            margin-bottom: var(--space-sm);
+        }
+
+        .kpi-subtitle {
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+
+        /* Top 3 styling */
+        .top-players {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-md);
+        }
+
+        .top-player {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            padding: var(--space-sm) 0;
+        }
+
+        .top-player:not(:last-child) {
+            border-bottom: 1px solid var(--gray-200);
+            padding-bottom: var(--space-md);
+        }
+
+        .rank {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .rank-1 {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4a 100%);
+            color: #8b6914;
+        }
+
+        .rank-2 {
+            background: linear-gradient(135deg, #c0c0c0 0%, #e8e8e8 100%);
+            color: #666;
+        }
+
+        .rank-3 {
+            background: linear-gradient(135deg, #cd7f32 0%, #daa06d 100%);
+            color: #5c3a1e;
+        }
+
+        .player-info {
+            flex: 1;
+        }
+
+        .player-name {
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .player-stats {
+            font-size: 0.85rem;
+            color: var(--gray-400);
+        }
+
+        /* Form récente */
+        .form-indicator {
+            display: flex;
+            gap: 4px;
+            margin-top: var(--space-sm);
+        }
+
+        .form-dot {
+            width: 24px;
+            height: 24px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .form-win {
+            background: var(--success);
+        }
+
+        .form-loss {
+            background: var(--danger);
+        }
+
+        /* ==========================================================================
+           SCORE TABLE SPECIFICS
+           ========================================================================== */
+        .team-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .team-players {
+            font-weight: 500;
+        }
+
+        .score-cell {
+            font-family: var(--font-display);
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .score-winner {
+            color: var(--success);
+        }
+
+        .score-loser {
+            color: var(--gray-400);
+        }
+
+        .winner-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--success);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* ==========================================================================
+           EMPTY STATES
+           ========================================================================== */
+        .empty-state {
+            text-align: center;
+            padding: var(--space-3xl);
+            color: var(--gray-400);
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            margin-bottom: var(--space-md);
+            opacity: 0.5;
+        }
+
+        .empty-state-text {
+            font-size: 1rem;
+        }
+
+        /* ==========================================================================
+           UTILITIES
+           ========================================================================== */
+        .win-rate {
+            font-weight: 600;
+        }
+
+        .win-rate-high {
+            color: var(--success);
+        }
+
+        .win-rate-medium {
+            color: var(--gold);
+        }
+
+        .win-rate-low {
+            color: var(--danger);
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .mb-0 {
+            margin-bottom: 0;
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: var(--space-xl);
+            right: var(--space-xl);
+            background: var(--gray-800);
+            color: white;
+            padding: var(--space-md) var(--space-xl);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all var(--transition-normal);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* Modal */
+        .modal-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition-normal);
+            z-index: 999;
+        }
+
+        .modal-backdrop.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal {
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            width: min(560px, 92vw);
+            padding: var(--space-xl);
+            transform: translateY(12px);
+            transition: transform var(--transition-normal);
+        }
+
+        .modal-backdrop.show .modal {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .modal-title {
+            font-family: var(--font-display);
+            font-size: 1.3rem;
+            color: var(--green-felt-dark);
+        }
+
+        .modal-body {
+            display: grid;
+            gap: var(--space-md);
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        .form-group input {
+            padding: var(--space-sm) var(--space-md);
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius-md);
+            font-size: 0.95rem;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--green-felt);
+            box-shadow: 0 0 0 3px rgba(26, 95, 74, 0.1);
+        }
+
+        .modal-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--space-sm);
+            margin-top: var(--space-lg);
+        }
+
+        .icon-btn {
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            padding: var(--space-xs);
+            border-radius: var(--radius-sm);
+            transition: background var(--transition-fast);
+        }
+
+        .icon-btn:hover {
+            background: var(--gray-100);
+        }
+
+        .actions-cell {
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .clickable-row {
+            cursor: pointer;
+        }
+
+        /* ==========================================================================
+           RESPONSIVE
+           ========================================================================== */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .table-actions {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .search-bar {
+                max-width: 100%;
+            }
+
+            th, td {
+                padding: var(--space-sm) var(--space-md);
+            }
+
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .filter-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-bar select {
+                width: 100%;
+            }
+        }
+
+        /* ==========================================================================
+           DECORATIVE ELEMENTS
+           ========================================================================== */
+        .card-suit {
+            position: absolute;
+            font-size: 6rem;
+            opacity: 0.03;
+            right: -10px;
+            bottom: -20px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== HEADER ===== -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">♠</div>
+                    <div>
+                        <h1>Belote Suresnes</h1>
+                        <div class="subtitle">Scores, sessions & performances du club</div>
+                    </div>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#joueurs">Joueurs</a></li>
+                        <li><a href="#sessions">Sessions</a></li>
+                        <li><a href="#scores">Scores</a></li>
+                        <li><a href="#kpi">KPI</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- ===== SECTION JOUEURS ===== -->
+    <section id="joueurs">
+        <div class="container">
+            <h2 class="section-title">Joueurs</h2>
+            <p class="section-subtitle">Les membres du club et leurs statistiques</p>
+
+            <div class="table-actions">
+                <div class="search-bar">
+                    <input type="text" id="searchPlayers" placeholder="Rechercher un joueur...">
+                </div>
+                <button class="btn btn-primary" id="addPlayerBtn">
+                    <span>+</span> Ajouter un joueur
+                </button>
+            </div>
+
+            <div class="table-wrapper">
+                <table id="playersTable">
+                    <thead>
+                        <tr>
+                            <th data-sort="name">Joueur</th>
+                            <th data-sort="games" class="text-center">Parties</th>
+                            <th data-sort="wins" class="text-center">Victoires</th>
+                            <th data-sort="winRate" class="text-center">Taux</th>
+                            <th data-sort="avgPoints" class="text-center">Pts moy.</th>
+                            <th class="text-right">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="playersBody">
+                        <!-- Rempli dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SECTION PROCHAINES SESSIONS ===== -->
+    <section id="sessions">
+        <div class="container">
+            <h2 class="section-title">Prochaines sessions</h2>
+            <p class="section-subtitle">Réservez votre place pour les prochaines parties</p>
+
+            <div class="table-actions mb-0">
+                <div></div>
+                <button class="btn btn-primary" disabled>
+                    <span>+</span> Ajouter une session
+                </button>
+            </div>
+
+            <div class="cards-grid" id="upcomingSessionsGrid">
+                <!-- Rempli dynamiquement -->
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SECTION HISTORIQUE & SCORES ===== -->
+    <section id="scores">
+        <div class="container">
+            <h2 class="section-title">Historique & scores</h2>
+            <p class="section-subtitle">Toutes les parties passées et leurs résultats</p>
+
+            <div class="table-actions">
+                <div class="filter-bar">
+                    <select id="playerFilter">
+                        <option value="">Tous les joueurs</option>
+                        <!-- Options remplies dynamiquement -->
+                    </select>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table id="scoresTable">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Équipe A</th>
+                            <th class="text-center">Score A</th>
+                            <th>Équipe B</th>
+                            <th class="text-center">Score B</th>
+                            <th>Vainqueur</th>
+                        </tr>
+                    </thead>
+                    <tbody id="scoresBody">
+                        <!-- Rempli dynamiquement -->
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="empty-state" id="scoresEmpty" style="display: none;">
+                <div class="empty-state-icon">🃏</div>
+                <div class="empty-state-text">Aucune partie trouvée pour ce joueur</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== SECTION KPI ===== -->
+    <section id="kpi">
+        <div class="container">
+            <h2 class="section-title">KPI & Performances</h2>
+            <p class="section-subtitle">Les chiffres clés et les meilleurs joueurs</p>
+
+            <div class="kpi-grid" id="kpiGrid">
+                <!-- Rempli dynamiquement -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Toast notification -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Modal Joueur -->
+    <div class="modal-backdrop" id="playerModal">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="playerModalTitle">
+            <div class="modal-header">
+                <div class="modal-title" id="playerModalTitle">Ajouter un joueur</div>
+                <button class="icon-btn" id="closeModalBtn" aria-label="Fermer">✖</button>
+            </div>
+            <form id="playerForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="firstName">Prénom *</label>
+                        <input type="text" id="firstName" name="first_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Nom *</label>
+                        <input type="text" id="lastName" name="last_name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Téléphone</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelModalBtn">Annuler</button>
+                    <button type="submit" class="btn btn-primary" id="savePlayerBtn">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================================================
+        // DONNÉES & API
+        // ==========================================================================
+
+        const API_BASE = 'http://localhost:3000/api/players';
+        let players = [];
+
+        /**
+         * Sessions passées avec scores
+         * teamA et teamB contiennent les IDs des joueurs
+         * scoreA et scoreB sont les scores finaux
+         */
+        const pastSessions = [
+            {
+                id: 1,
+                date: "2025-01-25",
+                teamA: [1, 2],
+                teamB: [3, 4],
+                scoreA: 1020,
+                scoreB: 890
+            },
+            {
+                id: 2,
+                date: "2025-01-18",
+                teamA: [5, 6],
+                teamB: [7, 8],
+                scoreA: 750,
+                scoreB: 1150
+            },
+            {
+                id: 3,
+                date: "2025-01-11",
+                teamA: [9, 10],
+                teamB: [11, 12],
+                scoreA: 980,
+                scoreB: 920
+            },
+            {
+                id: 4,
+                date: "2025-01-04",
+                teamA: [1, 5],
+                teamB: [2, 6],
+                scoreA: 1100,
+                scoreB: 850
+            },
+            {
+                id: 5,
+                date: "2024-12-28",
+                teamA: [3, 7],
+                teamB: [4, 8],
+                scoreA: 890,
+                scoreB: 1050
+            },
+            {
+                id: 6,
+                date: "2024-12-21",
+                teamA: [9, 1],
+                teamB: [10, 2],
+                scoreA: 1200,
+                scoreB: 780
+            },
+            {
+                id: 7,
+                date: "2024-12-14",
+                teamA: [11, 3],
+                teamB: [12, 4],
+                scoreA: 950,
+                scoreB: 1080
+            },
+            {
+                id: 8,
+                date: "2024-12-07",
+                teamA: [5, 9],
+                teamB: [6, 10],
+                scoreA: 1010,
+                scoreB: 990
+            }
+        ];
+
+        /**
+         * Sessions à venir
+         * participants contient les IDs des joueurs inscrits
+         */
+        const upcomingSessions = [
+            {
+                id: 101,
+                date: "2025-02-01",
+                time: "20:00",
+                location: "Café du Commerce, Suresnes",
+                participants: [1, 2, 3, 4, 5, 6]
+            },
+            {
+                id: 102,
+                date: "2025-02-08",
+                time: "19:30",
+                location: "Chez Jean-Pierre",
+                participants: [1, 7, 8, 9]
+            },
+            {
+                id: 103,
+                date: "2025-02-15",
+                time: "20:00",
+                location: "Salle municipale",
+                participants: [2, 4, 10, 11, 12]
+            }
+        ];
+
+        // ==========================================================================
+        // FONCTIONS UTILITAIRES
+        // ==========================================================================
+
+        /**
+         * Récupère un joueur par son ID
+         */
+        function getPlayerById(id) {
+            return players.find(p => p.id === id) || { id, name: `Joueur #${id}` };
+        }
+
+        /**
+         * Retourne le nom d'affichage d'un joueur (pseudo si disponible, sinon prénom)
+         */
+        function getDisplayName(player) {
+            if (!player) return 'Joueur inconnu';
+            if (player.pseudo) return player.pseudo;
+            if (player.name) return player.name.split(' ')[0];
+            return `Joueur #${player.id}`;
+        }
+
+        /**
+         * Formate une date au format français
+         */
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            const options = { weekday: 'long', day: 'numeric', month: 'long' };
+            return date.toLocaleDateString('fr-FR', options);
+        }
+
+        /**
+         * Formate une date courte
+         */
+        function formatDateShort(dateStr) {
+            const date = new Date(dateStr);
+            const options = { day: 'numeric', month: 'short', year: 'numeric' };
+            return date.toLocaleDateString('fr-FR', options);
+        }
+
+        /**
+         * Calcule les statistiques d'un joueur
+         */
+        function calculatePlayerStats(playerId) {
+            let games = 0;
+            let wins = 0;
+            let totalPoints = 0;
+            const recentResults = [];
+
+            pastSessions.forEach(session => {
+                const inTeamA = session.teamA.includes(playerId);
+                const inTeamB = session.teamB.includes(playerId);
+
+                if (inTeamA || inTeamB) {
+                    games++;
+                    const playerPoints = inTeamA ? session.scoreA : session.scoreB;
+                    const opponentPoints = inTeamA ? session.scoreB : session.scoreA;
+                    totalPoints += playerPoints;
+
+                    const won = playerPoints > opponentPoints;
+                    if (won) wins++;
+
+                    // Garder les 5 derniers résultats
+                    if (recentResults.length < 5) {
+                        recentResults.push(won ? 'W' : 'L');
+                    }
+                }
+            });
+
+            return {
+                games,
+                wins,
+                winRate: games > 0 ? Math.round((wins / games) * 100) : 0,
+                avgPoints: games > 0 ? Math.round(totalPoints / games) : 0,
+                recentResults
+            };
+        }
+
+        /**
+         * Retourne la classe CSS pour le taux de victoire
+         */
+        function getWinRateClass(rate) {
+            if (rate >= 60) return 'win-rate-high';
+            if (rate >= 40) return 'win-rate-medium';
+            return 'win-rate-low';
+        }
+
+        /**
+         * Affiche une notification toast
+         */
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        function normalizePlayer(row) {
+            return {
+                ...row,
+                name: `${row.first_name} ${row.last_name}`.trim(),
+                pseudo: null
+            };
+        }
+
+        async function fetchPlayers() {
+            const response = await fetch(API_BASE);
+            const payload = await response.json();
+
+            if (!response.ok || !payload.success) {
+                const message = payload?.error?.message || 'Erreur lors du chargement des joueurs.';
+                throw new Error(message);
+            }
+
+            players = payload.data.map(normalizePlayer);
+        }
+
+        async function savePlayer(payload, playerId = null) {
+            const method = playerId ? 'PUT' : 'POST';
+            const url = playerId ? `${API_BASE}/${playerId}` : API_BASE;
+
+            const response = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+            if (!response.ok || !data.success) {
+                const message = data?.error?.message || "Erreur lors de l'enregistrement.";
+                throw new Error(message);
+            }
+        }
+
+        async function deletePlayer(playerId) {
+            const response = await fetch(`${API_BASE}/${playerId}`, { method: 'DELETE' });
+            const data = await response.json();
+            if (!response.ok || !data.success) {
+                const message = data?.error?.message || 'Erreur lors de la suppression.';
+                throw new Error(message);
+            }
+        }
+
+        // ==========================================================================
+        // RENDU DES SECTIONS
+        // ==========================================================================
+
+        /**
+         * Render la table des joueurs
+         */
+        function renderPlayersTable(filter = '', sortKey = 'winRate', sortDir = 'desc') {
+            const tbody = document.getElementById('playersBody');
+
+            // Calculer les stats pour chaque joueur
+            let playersWithStats = players.map(player => {
+                const stats = calculatePlayerStats(player.id);
+                return {
+                    ...player,
+                    ...stats
+                };
+            });
+
+            // Filtrer
+            if (filter) {
+                const lowerFilter = filter.toLowerCase();
+                playersWithStats = playersWithStats.filter(p =>
+                    p.name.toLowerCase().includes(lowerFilter) ||
+                    (p.pseudo && p.pseudo.toLowerCase().includes(lowerFilter))
+                );
+            }
+
+            // Trier
+            playersWithStats.sort((a, b) => {
+                let valA = a[sortKey];
+                let valB = b[sortKey];
+
+                if (typeof valA === 'string') {
+                    valA = valA.toLowerCase();
+                    valB = valB.toLowerCase();
+                }
+
+                if (sortDir === 'asc') {
+                    return valA > valB ? 1 : -1;
+                } else {
+                    return valA < valB ? 1 : -1;
+                }
+            });
+
+            if (playersWithStats.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center">Aucun joueur pour le moment.</td>
+                    </tr>
+                `;
+                return;
+            }
+
+            // Render
+            tbody.innerHTML = playersWithStats.map(player => `
+                <tr class="clickable-row" data-player-id="${player.id}">
+                    <td>
+                        <strong>${player.name}</strong>
+                        ${player.pseudo ? `<span style="color: var(--gray-400);"> (${player.pseudo})</span>` : ''}
+                    </td>
+                    <td class="text-center">${player.games}</td>
+                    <td class="text-center">${player.wins}</td>
+                    <td class="text-center">
+                        <span class="win-rate ${getWinRateClass(player.winRate)}">${player.winRate}%</span>
+                    </td>
+                    <td class="text-center">${player.avgPoints}</td>
+                    <td class="actions-cell">
+                        <button class="icon-btn" data-action="edit" title="Modifier">✏️</button>
+                        <button class="icon-btn" data-action="delete" title="Supprimer">🗑</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        /**
+         * Render les cartes des sessions à venir
+         */
+        function renderUpcomingSessions() {
+            const grid = document.getElementById('upcomingSessionsGrid');
+            const suits = ['♠', '♥', '♦', '♣'];
+
+            grid.innerHTML = upcomingSessions.map((session, index) => {
+                const participantNames = session.participants
+                    .map(id => getDisplayName(getPlayerById(id)))
+                    .join(', ');
+
+                const participantTags = session.participants
+                    .map(id => `<span class="participant-tag">${getDisplayName(getPlayerById(id))}</span>`)
+                    .join('');
+
+                return `
+                    <div class="card card-session">
+                        <span class="card-suit">${suits[index % 4]}</span>
+                        <div class="card-header">
+                            <div>
+                                <div class="card-date">${formatDate(session.date)}</div>
+                                <div class="card-time">${session.time}</div>
+                            </div>
+                            <span class="card-badge">À venir</span>
+                        </div>
+                        <div class="card-location">
+                            📍 ${session.location}
+                        </div>
+                        <div class="card-participants">
+                            <div class="card-participants-label">Participants (${session.participants.length})</div>
+                            <div class="participants-list">
+                                ${participantTags}
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-gold btn-sm" onclick="copyWhatsAppMessage(${session.id})">
+                                📱 Copier message WhatsApp
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Copie le message WhatsApp pour une session
+         */
+        function copyWhatsAppMessage(sessionId) {
+            const session = upcomingSessions.find(s => s.id === sessionId);
+            if (!session) return;
+
+            const participantNames = session.participants
+                .map(id => getDisplayName(getPlayerById(id)))
+                .join(', ');
+
+            const message = `🃏 *Belote Suresnes*
+
+📅 ${formatDate(session.date)} à ${session.time}
+📍 ${session.location}
+
+👥 Déjà inscrits : ${participantNames}
+
+Qui est chaud ? 🔥`;
+
+            navigator.clipboard.writeText(message).then(() => {
+                showToast('Message copié ! Collez-le dans WhatsApp 📱');
+            }).catch(() => {
+                showToast('Erreur lors de la copie');
+            });
+        }
+
+        /**
+         * Render la table des scores
+         */
+        function renderScoresTable(filterPlayerId = null) {
+            const tbody = document.getElementById('scoresBody');
+            const emptyState = document.getElementById('scoresEmpty');
+            const tableWrapper = tbody.closest('.table-wrapper');
+
+            let filteredSessions = pastSessions;
+
+            if (filterPlayerId) {
+                filteredSessions = pastSessions.filter(session =>
+                    session.teamA.includes(filterPlayerId) ||
+                    session.teamB.includes(filterPlayerId)
+                );
+            }
+
+            if (filteredSessions.length === 0) {
+                tableWrapper.style.display = 'none';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            tableWrapper.style.display = 'block';
+            emptyState.style.display = 'none';
+
+            tbody.innerHTML = filteredSessions.map(session => {
+                const teamANames = session.teamA.map(id => getDisplayName(getPlayerById(id))).join(' & ');
+                const teamBNames = session.teamB.map(id => getDisplayName(getPlayerById(id))).join(' & ');
+                const teamAWins = session.scoreA > session.scoreB;
+                const winnerNames = teamAWins ? teamANames : teamBNames;
+
+                return `
+                    <tr>
+                        <td>${formatDateShort(session.date)}</td>
+                        <td>
+                            <div class="team-cell">
+                                <span class="team-players">${teamANames}</span>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <span class="score-cell ${teamAWins ? 'score-winner' : 'score-loser'}">${session.scoreA}</span>
+                        </td>
+                        <td>
+                            <div class="team-cell">
+                                <span class="team-players">${teamBNames}</span>
+                            </div>
+                        </td>
+                        <td class="text-center">
+                            <span class="score-cell ${!teamAWins ? 'score-winner' : 'score-loser'}">${session.scoreB}</span>
+                        </td>
+                        <td>
+                            <span class="winner-badge">🏆 ${winnerNames}</span>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        /**
+         * Remplit le dropdown de filtre des joueurs
+         */
+        function populatePlayerFilter() {
+            const select = document.getElementById('playerFilter');
+            const sortedPlayers = [...players].sort((a, b) => a.name.localeCompare(b.name));
+
+            while (select.options.length > 1) {
+                select.remove(1);
+            }
+
+            sortedPlayers.forEach(player => {
+                const option = document.createElement('option');
+                option.value = player.id;
+                option.textContent = `${player.name}${player.pseudo ? ` (${player.pseudo})` : ''}`;
+                select.appendChild(option);
+            });
+        }
+
+        /**
+         * Render les KPIs
+         */
+        function renderKPIs() {
+            const grid = document.getElementById('kpiGrid');
+
+            if (players.length === 0) {
+                grid.innerHTML = `
+                    <div class="kpi-card">
+                        <div class="kpi-title">📊 Statistiques du club</div>
+                        <div class="kpi-value">0</div>
+                        <div class="kpi-subtitle">Aucun joueur enregistré</div>
+                    </div>
+                `;
+                return;
+            }
+
+            // Calculer les stats pour tous les joueurs
+            const allStats = players.map(player => ({
+                ...player,
+                ...calculatePlayerStats(player.id)
+            }));
+
+            // Top 3 (par taux de victoire, puis points moyens)
+            const top3 = allStats
+                .filter(p => p.games >= 2) // Au moins 2 parties
+                .sort((a, b) => {
+                    if (b.winRate !== a.winRate) return b.winRate - a.winRate;
+                    return b.avgPoints - a.avgPoints;
+                })
+                .slice(0, 3);
+
+            // Joueur le plus actif
+            const mostActive = allStats.reduce((max, p) =>
+                p.games > max.games ? p : max
+            , allStats[0]);
+
+            // Forme récente du joueur avec le plus de parties récentes
+            const recentFormPlayer = allStats
+                .filter(p => p.recentResults.length >= 3)
+                .sort((a, b) => b.games - a.games)[0];
+
+            grid.innerHTML = `
+                <!-- Top 3 -->
+                <div class="kpi-card">
+                    <div class="kpi-title">🏆 Top 3 joueurs</div>
+                    <div class="top-players">
+                        ${top3.map((player, index) => `
+                            <div class="top-player">
+                                <div class="rank rank-${index + 1}">${index + 1}</div>
+                                <div class="player-info">
+                                    <div class="player-name">${getDisplayName(player)}</div>
+                                    <div class="player-stats">${player.winRate}% de victoires • ${player.avgPoints} pts/partie</div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- Joueur le plus actif -->
+                <div class="kpi-card">
+                    <div class="kpi-title">🎯 Joueur le plus actif</div>
+                    <div class="kpi-value">${getDisplayName(mostActive)}</div>
+                    <div class="kpi-subtitle">${mostActive.games} parties jouées</div>
+                </div>
+
+                <!-- Forme récente -->
+                <div class="kpi-card">
+                    <div class="kpi-title">📈 Forme récente</div>
+                    <div class="kpi-value">${recentFormPlayer ? getDisplayName(recentFormPlayer) : '-'}</div>
+                    ${recentFormPlayer ? `
+                        <div class="kpi-subtitle">5 derniers résultats :</div>
+                        <div class="form-indicator">
+                            ${recentFormPlayer.recentResults.map(r => `
+                                <span class="form-dot ${r === 'W' ? 'form-win' : 'form-loss'}">${r}</span>
+                            `).join('')}
+                        </div>
+                    ` : '<div class="kpi-subtitle">Pas assez de données</div>'}
+                </div>
+
+                <!-- Stats globales -->
+                <div class="kpi-card">
+                    <div class="kpi-title">📊 Statistiques du club</div>
+                    <div class="kpi-value">${pastSessions.length}</div>
+                    <div class="kpi-subtitle">parties jouées au total</div>
+                    <div style="margin-top: var(--space-md); font-size: 0.9rem; color: var(--gray-600);">
+                        ${players.length} joueurs inscrits<br>
+                        ${upcomingSessions.length} sessions à venir
+                    </div>
+                </div>
+            `;
+        }
+
+        // ==========================================================================
+        // EVENT LISTENERS & INITIALISATION
+        // ==========================================================================
+
+        // État du tri
+        let currentSort = { key: 'winRate', dir: 'desc' };
+
+        /**
+         * Gestion du tri des colonnes
+         */
+        function setupTableSort() {
+            const headers = document.querySelectorAll('#playersTable th[data-sort]');
+
+            headers.forEach(th => {
+                th.addEventListener('click', () => {
+                    const key = th.dataset.sort;
+
+                    // Inverser la direction si on clique sur la même colonne
+                    if (currentSort.key === key) {
+                        currentSort.dir = currentSort.dir === 'asc' ? 'desc' : 'asc';
+                    } else {
+                        currentSort.key = key;
+                        currentSort.dir = 'desc';
+                    }
+
+                    // Mettre à jour les classes CSS
+                    headers.forEach(h => h.classList.remove('sorted-asc', 'sorted-desc'));
+                    th.classList.add(currentSort.dir === 'asc' ? 'sorted-asc' : 'sorted-desc');
+
+                    // Re-render
+                    const filter = document.getElementById('searchPlayers').value;
+                    renderPlayersTable(filter, currentSort.key, currentSort.dir);
+                });
+            });
+
+            // Marquer la colonne par défaut
+            const defaultTh = document.querySelector('#playersTable th[data-sort="winRate"]');
+            if (defaultTh) defaultTh.classList.add('sorted-desc');
+        }
+
+        /**
+         * Gestion de la recherche de joueurs
+         */
+        function setupSearch() {
+            const searchInput = document.getElementById('searchPlayers');
+
+            searchInput.addEventListener('input', (e) => {
+                renderPlayersTable(e.target.value, currentSort.key, currentSort.dir);
+            });
+        }
+
+        /**
+         * Gestion du filtre par joueur dans les scores
+         */
+        function setupPlayerFilter() {
+            const select = document.getElementById('playerFilter');
+
+            select.addEventListener('change', (e) => {
+                const playerId = e.target.value ? parseInt(e.target.value) : null;
+                renderScoresTable(playerId);
+            });
+        }
+
+        function setupPlayerActions() {
+            const tbody = document.getElementById('playersBody');
+
+            tbody.addEventListener('click', (event) => {
+                const editBtn = event.target.closest('[data-action="edit"]');
+                const deleteBtn = event.target.closest('[data-action="delete"]');
+                const row = event.target.closest('tr[data-player-id]');
+
+                if (editBtn && row) {
+                    event.stopPropagation();
+                    const playerId = Number(row.dataset.playerId);
+                    const player = players.find(p => p.id === playerId);
+                    if (player) openPlayerModal('edit', player);
+                    return;
+                }
+
+                if (deleteBtn && row) {
+                    event.stopPropagation();
+                    const playerId = Number(row.dataset.playerId);
+                    handleDeletePlayer(playerId);
+                    return;
+                }
+
+                if (row) {
+                    const playerId = Number(row.dataset.playerId);
+                    const player = players.find(p => p.id === playerId);
+                    if (player) openPlayerModal('edit', player);
+                }
+            });
+        }
+
+        function setupModal() {
+            const modal = document.getElementById('playerModal');
+            const closeBtn = document.getElementById('closeModalBtn');
+            const cancelBtn = document.getElementById('cancelModalBtn');
+            const form = document.getElementById('playerForm');
+
+            function closeModal() {
+                modal.classList.remove('show');
+                form.reset();
+                form.dataset.mode = '';
+                form.dataset.playerId = '';
+            }
+
+            window.openPlayerModal = function openPlayerModal(mode, player = null) {
+                const title = document.getElementById('playerModalTitle');
+                const saveBtn = document.getElementById('savePlayerBtn');
+
+                form.dataset.mode = mode;
+                form.dataset.playerId = player ? player.id : '';
+
+                title.textContent = mode === 'edit' ? 'Modifier le joueur' : 'Ajouter un joueur';
+                saveBtn.textContent = mode === 'edit' ? 'Enregistrer' : 'Ajouter';
+
+                if (player) {
+                    document.getElementById('firstName').value = player.first_name || '';
+                    document.getElementById('lastName').value = player.last_name || '';
+                    document.getElementById('email').value = player.email || '';
+                    document.getElementById('phone').value = player.phone || '';
+                }
+
+                modal.classList.add('show');
+            };
+
+            closeBtn.addEventListener('click', closeModal);
+            cancelBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) closeModal();
+            });
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const payload = {
+                    first_name: document.getElementById('firstName').value.trim(),
+                    last_name: document.getElementById('lastName').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    phone: document.getElementById('phone').value.trim()
+                };
+
+                if (!payload.first_name || !payload.last_name) {
+                    showToast('Prénom et nom sont obligatoires.');
+                    return;
+                }
+
+                if (payload.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(payload.email)) {
+                    showToast("Email invalide.");
+                    return;
+                }
+
+                try {
+                    const mode = form.dataset.mode;
+                    const playerId = form.dataset.playerId ? Number(form.dataset.playerId) : null;
+                    await savePlayer(payload, mode === 'edit' ? playerId : null);
+                    await loadPlayers();
+                    showToast(mode === 'edit' ? 'Joueur mis à jour.' : 'Joueur créé.');
+                    closeModal();
+                } catch (error) {
+                    showToast(error.message || 'Erreur lors de la sauvegarde.');
+                }
+            });
+        }
+
+        async function handleDeletePlayer(playerId) {
+            const confirmed = confirm('Supprimer ce joueur ?');
+            if (!confirmed) return;
+
+            try {
+                await deletePlayer(playerId);
+                await loadPlayers();
+                showToast('Joueur supprimé.');
+            } catch (error) {
+                showToast(error.message || 'Erreur lors de la suppression.');
+            }
+        }
+
+        async function loadPlayers() {
+            try {
+                await fetchPlayers();
+                const filter = document.getElementById('searchPlayers').value;
+                renderPlayersTable(filter, currentSort.key, currentSort.dir);
+                populatePlayerFilter();
+                renderKPIs();
+            } catch (error) {
+                showToast(error.message || 'Impossible de charger les joueurs.');
+            }
+        }
+
+        /**
+         * Initialisation de l'application
+         */
+        async function init() {
+            await loadPlayers();
+            renderUpcomingSessions();
+            renderScoresTable();
+
+            setupTableSort();
+            setupSearch();
+            setupPlayerFilter();
+            setupPlayerActions();
+            setupModal();
+
+            document.getElementById('addPlayerBtn').addEventListener('click', () => {
+                openPlayerModal('create');
+            });
+        }
+
+        // Lancer l'application au chargement
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
