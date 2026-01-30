@@ -400,7 +400,7 @@
         .card {
             background: white;
             border-radius: var(--radius-lg);
-            padding: var(--space-xl);
+            padding: var(--space-lg);
             box-shadow: var(--shadow-sm);
             transition: all var(--transition-normal);
             position: relative;
@@ -420,12 +420,13 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            margin-bottom: var(--space-md);
+            margin-bottom: var(--space-sm);
+            gap: var(--space-sm);
         }
 
         .card-date {
             font-family: var(--font-display);
-            font-size: 1.1rem;
+            font-size: 1rem;
             color: var(--green-felt-dark);
             font-weight: 600;
         }
@@ -451,12 +452,12 @@
             align-items: center;
             gap: var(--space-sm);
             color: var(--gray-600);
-            font-size: 0.9rem;
-            margin-bottom: var(--space-md);
+            font-size: 0.85rem;
+            margin-bottom: var(--space-sm);
         }
 
         .card-participants {
-            margin-bottom: var(--space-lg);
+            margin-bottom: var(--space-md);
         }
 
         .card-participants-label {
@@ -484,6 +485,17 @@
         .card-actions {
             display: flex;
             gap: var(--space-sm);
+            flex-wrap: wrap;
+        }
+
+        .card-match .btn {
+            font-size: 0.8rem;
+            padding: 0.35rem 0.7rem;
+            line-height: 1.1;
+        }
+
+        .card-match .card-actions {
+            margin-top: var(--space-sm);
         }
 
         /* ==========================================================================
@@ -637,10 +649,13 @@
             font-family: var(--font-display);
             font-size: 1.1rem;
             font-weight: 700;
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
         }
 
         .score-winner {
             color: var(--success);
+            background: rgba(46, 204, 113, 0.12);
         }
 
         .score-loser {
@@ -657,6 +672,138 @@
             border-radius: var(--radius-sm);
             font-size: 0.8rem;
             font-weight: 600;
+        }
+
+        .winner-badge.tie {
+            background: rgba(212, 168, 83, 0.15);
+            color: var(--gold);
+        }
+
+        .rounds-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            background: rgba(26, 95, 74, 0.08);
+            color: var(--green-felt-dark);
+            padding: 2px 8px;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .pagination-label {
+            font-size: 0.85rem;
+            color: var(--gray-600);
+        }
+
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-xs);
+            padding: var(--space-xs) var(--space-sm);
+            border-radius: var(--radius-sm);
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-scheduled {
+            background: rgba(212, 168, 83, 0.15);
+            color: var(--gold);
+        }
+
+        .status-played {
+            background: rgba(46, 204, 113, 0.12);
+            color: var(--success);
+        }
+
+        .card-match {
+            border-left: 4px solid var(--green-felt);
+        }
+
+        .match-teams {
+            display: grid;
+            gap: 4px;
+            margin-bottom: var(--space-sm);
+        }
+
+        .match-team {
+            font-weight: 600;
+            color: var(--gray-800);
+            font-size: 0.95rem;
+        }
+
+        .match-kpis {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: var(--space-sm);
+            margin-bottom: var(--space-sm);
+        }
+
+        .match-kpi {
+            background: var(--gray-100);
+            padding: 0.4rem 0.6rem;
+            border-radius: var(--radius-sm);
+            font-size: 0.8rem;
+            color: var(--gray-600);
+        }
+
+        .match-kpi strong {
+            display: block;
+            font-family: var(--font-display);
+            font-size: 0.95rem;
+            color: var(--green-felt-dark);
+        }
+
+        .scores-grid {
+            display: grid;
+            gap: var(--space-md);
+        }
+
+        .scores-summary {
+            background: var(--gray-100);
+            padding: var(--space-sm) var(--space-md);
+            border-radius: var(--radius-md);
+            display: grid;
+            gap: var(--space-xs);
+            font-size: 0.9rem;
+            color: var(--gray-600);
+        }
+
+        .scores-summary strong {
+            color: var(--green-felt-dark);
+        }
+
+        .rounds-row {
+            display: grid;
+            grid-template-columns: 80px 1fr 1fr;
+            gap: var(--space-md);
+            align-items: center;
+        }
+
+        .round-index {
+            font-weight: 600;
+            color: var(--green-felt-dark);
+        }
+
+        .rounds-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .helper-text {
+            font-size: 0.85rem;
+            color: var(--gray-400);
         }
 
         /* ==========================================================================
@@ -792,14 +939,17 @@
             color: var(--gray-600);
         }
 
-        .form-group input {
+        .form-group input,
+        .form-group select {
             padding: var(--space-sm) var(--space-md);
             border: 1px solid var(--gray-300);
             border-radius: var(--radius-md);
             font-size: 0.95rem;
+            background: white;
         }
 
-        .form-group input:focus {
+        .form-group input:focus,
+        .form-group select:focus {
             outline: none;
             border-color: var(--green-felt);
             box-shadow: 0 0 0 3px rgba(26, 95, 74, 0.1);
@@ -911,6 +1061,7 @@
                 <nav>
                     <ul>
                         <li><a href="#joueurs">Joueurs</a></li>
+                        <li><a href="#parties">Parties</a></li>
                         <li><a href="#sessions">Sessions</a></li>
                         <li><a href="#scores">Scores</a></li>
                         <li><a href="#kpi">KPI</a></li>
@@ -955,21 +1106,26 @@
         </div>
     </section>
 
-    <!-- ===== SECTION PROCHAINES SESSIONS ===== -->
-    <section id="sessions">
+    <!-- ===== SECTION PARTIES ===== -->
+    <section id="parties">
         <div class="container">
-            <h2 class="section-title">Prochaines sessions</h2>
-            <p class="section-subtitle">Réservez votre place pour les prochaines parties</p>
+            <h2 class="section-title">Parties</h2>
+            <p class="section-subtitle">Planifiez une partie, saisissez les manches et suivez les vainqueurs</p>
 
             <div class="table-actions mb-0">
                 <div></div>
-                <button class="btn btn-primary" disabled>
-                    <span>+</span> Ajouter une session
+                <button class="btn btn-primary" id="addMatchBtn">
+                    <span>+</span> Ajouter une partie
                 </button>
             </div>
 
-            <div class="cards-grid" id="upcomingSessionsGrid">
+            <div class="cards-grid" id="matchesGrid">
                 <!-- Rempli dynamiquement -->
+            </div>
+
+            <div class="empty-state" id="matchesEmpty" style="display: none;">
+                <div class="empty-state-icon">♣️</div>
+                <div class="empty-state-text">Aucune partie planifiée pour le moment</div>
             </div>
         </div>
     </section>
@@ -1005,6 +1161,12 @@
                         <!-- Rempli dynamiquement -->
                     </tbody>
                 </table>
+            </div>
+
+            <div class="pagination" id="scoresPagination" style="display: none;">
+                <span class="pagination-label" id="scoresPaginationLabel"></span>
+                <button class="btn btn-secondary btn-sm" id="scoresPrevBtn">Précédent</button>
+                <button class="btn btn-secondary btn-sm" id="scoresNextBtn">Suivant</button>
             </div>
 
             <div class="empty-state" id="scoresEmpty" style="display: none;">
@@ -1063,13 +1225,96 @@
         </div>
     </div>
 
+    <!-- Modal Partie -->
+    <div class="modal-backdrop" id="matchModal">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="matchModalTitle">
+            <div class="modal-header">
+                <div class="modal-title" id="matchModalTitle">Ajouter une partie</div>
+                <button class="icon-btn" id="closeMatchModalBtn" aria-label="Fermer">✖</button>
+            </div>
+            <form id="matchForm">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="matchPlayedAt">Date & heure *</label>
+                        <input type="datetime-local" id="matchPlayedAt" name="played_at" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="matchLocation">Lieu *</label>
+                        <input type="text" id="matchLocation" name="location" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="team1Player1">Équipe 1 — Joueur 1 *</label>
+                        <select id="team1Player1" class="match-player-select" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="team1Player2">Équipe 1 — Joueur 2 *</label>
+                        <select id="team1Player2" class="match-player-select" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="team2Player1">Équipe 2 — Joueur 1 *</label>
+                        <select id="team2Player1" class="match-player-select" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="team2Player2">Équipe 2 — Joueur 2 *</label>
+                        <select id="team2Player2" class="match-player-select" required></select>
+                    </div>
+                    <div class="helper-text">Les joueurs doivent être tous différents.</div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelMatchModalBtn">Annuler</button>
+                    <button type="submit" class="btn btn-primary" id="saveMatchBtn">Enregistrer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Scores -->
+    <div class="modal-backdrop" id="scoresModal">
+        <div class="modal" role="dialog" aria-modal="true" aria-labelledby="scoresModalTitle">
+            <div class="modal-header">
+                <div class="modal-title" id="scoresModalTitle">Saisir les scores</div>
+                <button class="icon-btn" id="closeScoresModalBtn" aria-label="Fermer">✖</button>
+            </div>
+            <form id="scoresForm">
+                <div class="modal-body">
+                    <div class="helper-text" id="scoresTeams"></div>
+                    <div class="scores-summary" id="scoresSummary" style="display: none;"></div>
+                    <div class="form-group">
+                        <label for="roundsCount">Nombre de manches *</label>
+                        <div class="rounds-actions">
+                            <input type="number" id="roundsCount" min="1" value="1">
+                            <button type="button" class="btn btn-secondary btn-sm" id="addRoundBtn">+ Manche</button>
+                            <button type="button" class="btn btn-secondary btn-sm" id="removeRoundBtn">- Manche</button>
+                        </div>
+                    </div>
+                    <div class="scores-grid" id="roundsContainer">
+                        <!-- Lignes de manches -->
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelScoresModalBtn">Annuler</button>
+                    <button type="submit" class="btn btn-primary" id="saveScoresBtn">Enregistrer les scores</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <script>
         // ==========================================================================
         // DONNÉES & API
         // ==========================================================================
 
         const API_BASE = 'http://localhost:3000/api/players';
+        const MATCHES_API_BASE = 'http://localhost:3000/api/matches';
         let players = [];
+        let matches = [];
+        let scoresState = {
+            items: [],
+            limit: 10,
+            offset: 0,
+            total: 0,
+            filterPlayerId: null
+        };
 
         /**
          * Sessions passées avec scores
@@ -1189,6 +1434,9 @@
             if (!player) return 'Joueur inconnu';
             if (player.pseudo) return player.pseudo;
             if (player.name) return player.name.split(' ')[0];
+            if (player.first_name || player.last_name) {
+                return `${player.first_name || ''} ${player.last_name || ''}`.trim();
+            }
             return `Joueur #${player.id}`;
         }
 
@@ -1208,6 +1456,18 @@
             const date = new Date(dateStr);
             const options = { day: 'numeric', month: 'short', year: 'numeric' };
             return date.toLocaleDateString('fr-FR', options);
+        }
+
+        function formatDateTime(dateStr) {
+            const date = new Date(dateStr);
+            const options = { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' };
+            return date.toLocaleDateString('fr-FR', options);
+        }
+
+        function toLocalInputValue(dateStr) {
+            const date = dateStr ? new Date(dateStr) : new Date();
+            const tzOffset = date.getTimezoneOffset() * 60000;
+            return new Date(date.getTime() - tzOffset).toISOString().slice(0, 16);
         }
 
         /**
@@ -1313,6 +1573,88 @@
             }
         }
 
+        async function fetchMatches() {
+            const response = await fetch(MATCHES_API_BASE);
+            const payload = await response.json();
+
+            if (!response.ok || !payload.success) {
+                const message = payload?.error?.message || 'Erreur lors du chargement des parties.';
+                throw new Error(message);
+            }
+
+            matches = payload.data;
+        }
+
+        async function fetchMatchDetails(matchId) {
+            const response = await fetch(`${MATCHES_API_BASE}/${matchId}`);
+            const payload = await response.json();
+
+            if (!response.ok || !payload.success) {
+                const message = payload?.error?.message || 'Erreur lors du chargement de la partie.';
+                throw new Error(message);
+            }
+
+            return payload.data;
+        }
+
+        async function fetchPlayedMatches({ limit = 10, offset = 0, playerId = null } = {}) {
+            const params = new URLSearchParams();
+            params.set('limit', String(limit));
+            params.set('offset', String(offset));
+            if (playerId) {
+                params.set('player_id', String(playerId));
+            }
+
+            const response = await fetch(`${MATCHES_API_BASE}/played?${params.toString()}`);
+            const payload = await response.json();
+
+            if (!response.ok || !payload.success) {
+                const message = payload?.error?.message || 'Erreur lors du chargement des parties jouées.';
+                throw new Error(message);
+            }
+
+            return payload.data;
+        }
+
+        async function saveMatch(payload, matchId = null) {
+            const method = matchId ? 'PUT' : 'POST';
+            const url = matchId ? `${MATCHES_API_BASE}/${matchId}` : MATCHES_API_BASE;
+
+            const response = await fetch(url, {
+                method,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const data = await response.json();
+            if (!response.ok || !data.success) {
+                const message = data?.error?.message || "Erreur lors de l'enregistrement de la partie.";
+                throw new Error(message);
+            }
+        }
+
+        async function deleteMatch(matchId) {
+            const response = await fetch(`${MATCHES_API_BASE}/${matchId}`, { method: 'DELETE' });
+            const data = await response.json();
+            if (!response.ok || !data.success) {
+                const message = data?.error?.message || 'Erreur lors de la suppression.';
+                throw new Error(message);
+            }
+        }
+
+        async function saveMatchRounds(matchId, rounds) {
+            const response = await fetch(`${MATCHES_API_BASE}/${matchId}/rounds`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ rounds })
+            });
+            const data = await response.json();
+            if (!response.ok || !data.success) {
+                const message = data?.error?.message || 'Erreur lors de la sauvegarde des scores.';
+                throw new Error(message);
+            }
+        }
+
         // ==========================================================================
         // RENDU DES SECTIONS
         // ==========================================================================
@@ -1388,76 +1730,18 @@
             `).join('');
         }
 
-        /**
-         * Render les cartes des sessions à venir
-         */
-        function renderUpcomingSessions() {
-            const grid = document.getElementById('upcomingSessionsGrid');
-            const suits = ['♠', '♥', '♦', '♣'];
+        function buildMatchWhatsAppMessage(match) {
+            const team1Label = getMatchTeamLabel(match.team1);
+            const team2Label = getMatchTeamLabel(match.team2);
+            const isPlayed = match.status === 'played' || match.rounds_played > 0;
 
-            grid.innerHTML = upcomingSessions.map((session, index) => {
-                const participantNames = session.participants
-                    .map(id => getDisplayName(getPlayerById(id)))
-                    .join(', ');
+            return `🃏 Belote Suresnes
 
-                const participantTags = session.participants
-                    .map(id => `<span class="participant-tag">${getDisplayName(getPlayerById(id))}</span>`)
-                    .join('');
-
-                return `
-                    <div class="card card-session">
-                        <span class="card-suit">${suits[index % 4]}</span>
-                        <div class="card-header">
-                            <div>
-                                <div class="card-date">${formatDate(session.date)}</div>
-                                <div class="card-time">${session.time}</div>
-                            </div>
-                            <span class="card-badge">À venir</span>
-                        </div>
-                        <div class="card-location">
-                            📍 ${session.location}
-                        </div>
-                        <div class="card-participants">
-                            <div class="card-participants-label">Participants (${session.participants.length})</div>
-                            <div class="participants-list">
-                                ${participantTags}
-                            </div>
-                        </div>
-                        <div class="card-actions">
-                            <button class="btn btn-gold btn-sm" onclick="copyWhatsAppMessage(${session.id})">
-                                📱 Copier message WhatsApp
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        /**
-         * Copie le message WhatsApp pour une session
-         */
-        function copyWhatsAppMessage(sessionId) {
-            const session = upcomingSessions.find(s => s.id === sessionId);
-            if (!session) return;
-
-            const participantNames = session.participants
-                .map(id => getDisplayName(getPlayerById(id)))
-                .join(', ');
-
-            const message = `🃏 *Belote Suresnes*
-
-📅 ${formatDate(session.date)} à ${session.time}
-📍 ${session.location}
-
-👥 Déjà inscrits : ${participantNames}
-
-Qui est chaud ? 🔥`;
-
-            navigator.clipboard.writeText(message).then(() => {
-                showToast('Message copié ! Collez-le dans WhatsApp 📱');
-            }).catch(() => {
-                showToast('Erreur lors de la copie');
-            });
+📅 ${formatDateTime(match.played_at)}
+📍 ${match.location}
+👥 Équipe 1 : ${team1Label}
+👥 Équipe 2 : ${team2Label}
+✅ Statut : ${isPlayed ? 'Jouée' : 'Planifiée'}`;
         }
 
         /**
@@ -1468,40 +1752,38 @@ Qui est chaud ? 🔥`;
             const emptyState = document.getElementById('scoresEmpty');
             const tableWrapper = tbody.closest('.table-wrapper');
 
-            let filteredSessions = pastSessions;
+            const sessions = scoresState.items || [];
 
-            if (filterPlayerId) {
-                filteredSessions = pastSessions.filter(session =>
-                    session.teamA.includes(filterPlayerId) ||
-                    session.teamB.includes(filterPlayerId)
-                );
-            }
-
-            if (filteredSessions.length === 0) {
+            if (sessions.length === 0) {
                 tableWrapper.style.display = 'none';
                 emptyState.style.display = 'block';
+                updateScoresPagination();
                 return;
             }
 
             tableWrapper.style.display = 'block';
             emptyState.style.display = 'none';
 
-            tbody.innerHTML = filteredSessions.map(session => {
-                const teamANames = session.teamA.map(id => getDisplayName(getPlayerById(id))).join(' & ');
-                const teamBNames = session.teamB.map(id => getDisplayName(getPlayerById(id))).join(' & ');
-                const teamAWins = session.scoreA > session.scoreB;
-                const winnerNames = teamAWins ? teamANames : teamBNames;
+            tbody.innerHTML = sessions.map(session => {
+                const teamANames = `${getDisplayName(session.teamA.p1)} & ${getDisplayName(session.teamA.p2)}`;
+                const teamBNames = `${getDisplayName(session.teamB.p1)} & ${getDisplayName(session.teamB.p2)}`;
+                const teamARounds = Number(session.rounds?.wonA) || 0;
+                const teamBRounds = Number(session.rounds?.wonB) || 0;
+                const isTie = teamARounds === teamBRounds;
+                const teamAWins = teamARounds > teamBRounds;
+                const winnerNames = isTie ? 'Égalité' : (teamAWins ? teamANames : teamBNames);
+                const roundSummary = `${teamARounds} - ${teamBRounds}`;
 
                 return `
                     <tr>
-                        <td>${formatDateShort(session.date)}</td>
+                        <td>${formatDateShort(session.played_at)}</td>
                         <td>
                             <div class="team-cell">
                                 <span class="team-players">${teamANames}</span>
                             </div>
                         </td>
                         <td class="text-center">
-                            <span class="score-cell ${teamAWins ? 'score-winner' : 'score-loser'}">${session.scoreA}</span>
+                            <span class="score-cell ${isTie ? '' : (teamAWins ? 'score-winner' : 'score-loser')}">${session.totals?.scoreA ?? 0}</span>
                         </td>
                         <td>
                             <div class="team-cell">
@@ -1509,14 +1791,56 @@ Qui est chaud ? 🔥`;
                             </div>
                         </td>
                         <td class="text-center">
-                            <span class="score-cell ${!teamAWins ? 'score-winner' : 'score-loser'}">${session.scoreB}</span>
+                            <span class="score-cell ${isTie ? '' : (!teamAWins ? 'score-winner' : 'score-loser')}">${session.totals?.scoreB ?? 0}</span>
                         </td>
                         <td>
-                            <span class="winner-badge">🏆 ${winnerNames}</span>
+                            <span class="winner-badge ${isTie ? 'tie' : ''}">🏆 ${winnerNames}</span>
+                            <div class="helper-text">Manches : <span class="rounds-badge">${roundSummary}</span></div>
                         </td>
                     </tr>
                 `;
             }).join('');
+            updateScoresPagination();
+        }
+
+        function updateScoresPagination() {
+            const pagination = document.getElementById('scoresPagination');
+            const label = document.getElementById('scoresPaginationLabel');
+            const prevBtn = document.getElementById('scoresPrevBtn');
+            const nextBtn = document.getElementById('scoresNextBtn');
+
+            if (!pagination) return;
+
+            const { limit, offset, total } = scoresState;
+            const start = total === 0 ? 0 : offset + 1;
+            const end = Math.min(offset + limit, total);
+
+            if (total <= limit) {
+                pagination.style.display = 'none';
+                return;
+            }
+
+            pagination.style.display = 'flex';
+            label.textContent = `Affichage ${start}-${end} sur ${total}`;
+            prevBtn.disabled = offset <= 0;
+            nextBtn.disabled = offset + limit >= total;
+        }
+
+        async function loadScores() {
+            try {
+                const data = await fetchPlayedMatches({
+                    limit: scoresState.limit,
+                    offset: scoresState.offset,
+                    playerId: scoresState.filterPlayerId
+                });
+                scoresState.items = data.items;
+                scoresState.total = data.pagination?.total ?? 0;
+                scoresState.limit = data.pagination?.limit ?? scoresState.limit;
+                scoresState.offset = data.pagination?.offset ?? scoresState.offset;
+                renderScoresTable(scoresState.filterPlayerId);
+            } catch (error) {
+                showToast(error.message || 'Impossible de charger les scores.');
+            }
         }
 
         /**
@@ -1631,6 +1955,103 @@ Qui est chaud ? 🔥`;
             `;
         }
 
+        function getMatchTeamLabel(team) {
+            return `${team.p1.name} & ${team.p2.name}`;
+        }
+
+        function summarizeRounds(rounds = []) {
+            return rounds.reduce((acc, round) => {
+                acc.team1 += Number(round.team1_score) || 0;
+                acc.team2 += Number(round.team2_score) || 0;
+                if ((Number(round.team1_score) || 0) > (Number(round.team2_score) || 0)) {
+                    acc.team1Rounds += 1;
+                } else if ((Number(round.team2_score) || 0) > (Number(round.team1_score) || 0)) {
+                    acc.team2Rounds += 1;
+                }
+                return acc;
+            }, { team1: 0, team2: 0, team1Rounds: 0, team2Rounds: 0 });
+        }
+
+        function getWinnerLabelFromTotals(totals, team1Label, team2Label) {
+            if (!totals) return 'À définir';
+            if (totals.team1 > totals.team2) return team1Label;
+            if (totals.team2 > totals.team1) return team2Label;
+            return 'Égalité';
+        }
+
+        function updateScoresSummary(totals, team1Label, team2Label) {
+            const summary = document.getElementById('scoresSummary');
+            if (!summary || !totals) return;
+            const winnerLabel = getWinnerLabelFromTotals(totals, team1Label, team2Label);
+            summary.style.display = 'grid';
+            summary.innerHTML = `
+                <div><strong>Vainqueurs :</strong> ${winnerLabel}</div>
+                <div><strong>Score cumulé :</strong> ${totals.team1} - ${totals.team2}</div>
+                <div><strong>Manches gagnées :</strong> Équipe 1 ${totals.team1Rounds} • Équipe 2 ${totals.team2Rounds}</div>
+            `;
+        }
+
+        function renderMatches() {
+            const grid = document.getElementById('matchesGrid');
+            const emptyState = document.getElementById('matchesEmpty');
+
+            if (!matches.length) {
+                grid.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+
+            grid.innerHTML = matches.map(match => {
+                const team1Label = getMatchTeamLabel(match.team1);
+                const team2Label = getMatchTeamLabel(match.team2);
+                const isPlayed = match.status === 'played' || match.rounds_played > 0;
+                const totals = match.rounds ? summarizeRounds(match.rounds) : null;
+                const hasTotals = totals && (match.rounds || []).length > 0;
+                const winnerLabel = hasTotals ? getWinnerLabelFromTotals(totals, team1Label, team2Label) : 'À définir';
+
+                return `
+                    <div class="card card-match" data-match-id="${match.id}">
+                        <span class="card-suit">♠</span>
+                        <div class="card-header">
+                            <div>
+                                <div class="card-date">${formatDateTime(match.played_at)}</div>
+                                <div class="card-time">${match.location}</div>
+                            </div>
+                            <span class="status-badge ${isPlayed ? 'status-played' : 'status-scheduled'}">
+                                ${isPlayed ? 'Jouée' : 'Planifiée'}
+                            </span>
+                        </div>
+                        <div class="match-teams">
+                            <div class="match-team">Équipe 1 : ${team1Label}</div>
+                            <div class="match-team">Équipe 2 : ${team2Label}</div>
+                        </div>
+                        <div class="match-kpis">
+                            <div class="match-kpi">
+                                Équipe gagnante
+                                <strong>${isPlayed ? winnerLabel : '—'}</strong>
+                            </div>
+                            <div class="match-kpi">
+                                Manches
+                                <strong>${match.rounds_played}</strong>
+                            </div>
+                            <div class="match-kpi">
+                                Score cumulé
+                                <strong>${hasTotals ? `${totals.team1} - ${totals.team2}` : '—'}</strong>
+                            </div>
+                        </div>
+                        <div class="card-actions">
+                            <button class="btn btn-secondary btn-sm" data-action="edit-match">✏️ Modifier</button>
+                            <button class="btn btn-secondary btn-sm" data-action="delete-match">🗑 Supprimer</button>
+                            <button class="btn btn-gold btn-sm" data-action="scores-match">🧮 Saisir les scores</button>
+                            <button class="btn btn-gold btn-sm" data-action="copy-match">📱 Copier message WhatsApp</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
         // ==========================================================================
         // EVENT LISTENERS & INITIALISATION
         // ==========================================================================
@@ -1690,7 +2111,29 @@ Qui est chaud ? 🔥`;
 
             select.addEventListener('change', (e) => {
                 const playerId = e.target.value ? parseInt(e.target.value) : null;
-                renderScoresTable(playerId);
+                scoresState.filterPlayerId = playerId;
+                scoresState.offset = 0;
+                loadScores();
+            });
+        }
+
+        function setupScoresPagination() {
+            const prevBtn = document.getElementById('scoresPrevBtn');
+            const nextBtn = document.getElementById('scoresNextBtn');
+
+            if (!prevBtn || !nextBtn) return;
+
+            prevBtn.addEventListener('click', () => {
+                scoresState.offset = Math.max(0, scoresState.offset - scoresState.limit);
+                loadScores();
+            });
+
+            nextBtn.addEventListener('click', () => {
+                const nextOffset = scoresState.offset + scoresState.limit;
+                if (nextOffset < scoresState.total) {
+                    scoresState.offset = nextOffset;
+                    loadScores();
+                }
             });
         }
 
@@ -1817,9 +2260,312 @@ Qui est chaud ? 🔥`;
                 renderPlayersTable(filter, currentSort.key, currentSort.dir);
                 populatePlayerFilter();
                 renderKPIs();
+                populateMatchSelects();
             } catch (error) {
                 showToast(error.message || 'Impossible de charger les joueurs.');
             }
+        }
+
+        function populateMatchSelects() {
+            const selects = document.querySelectorAll('.match-player-select');
+            const sortedPlayers = [...players].sort((a, b) => a.name.localeCompare(b.name));
+
+            selects.forEach(select => {
+                const currentValue = select.value;
+                select.innerHTML = '';
+                const placeholder = document.createElement('option');
+                placeholder.value = '';
+                placeholder.textContent = 'Sélectionner un joueur';
+                placeholder.disabled = true;
+                placeholder.selected = true;
+                select.appendChild(placeholder);
+
+                sortedPlayers.forEach(player => {
+                    const option = document.createElement('option');
+                    option.value = player.id;
+                    option.textContent = `${player.name}`;
+                    select.appendChild(option);
+                });
+
+                if (currentValue) {
+                    select.value = currentValue;
+                }
+            });
+        }
+
+        async function loadMatches() {
+            try {
+                await fetchMatches();
+
+                const playedMatches = matches.filter(match => match.status === 'played' && match.rounds_played > 0);
+                const details = await Promise.all(
+                    playedMatches.map(match => fetchMatchDetails(match.id).catch(() => null))
+                );
+
+                details.forEach(detail => {
+                    if (!detail) return;
+                    const index = matches.findIndex(match => match.id === detail.id);
+                    if (index !== -1) {
+                        matches[index] = { ...matches[index], rounds: detail.rounds };
+                    }
+                });
+
+                renderMatches();
+            } catch (error) {
+                showToast(error.message || 'Impossible de charger les parties.');
+            }
+        }
+
+        function setupMatchModal() {
+            const modal = document.getElementById('matchModal');
+            const closeBtn = document.getElementById('closeMatchModalBtn');
+            const cancelBtn = document.getElementById('cancelMatchModalBtn');
+            const form = document.getElementById('matchForm');
+
+            function closeModal() {
+                modal.classList.remove('show');
+                form.reset();
+                form.dataset.mode = '';
+                form.dataset.matchId = '';
+            }
+
+            window.openMatchModal = function openMatchModal(mode, match = null) {
+                const title = document.getElementById('matchModalTitle');
+                const saveBtn = document.getElementById('saveMatchBtn');
+
+                form.dataset.mode = mode;
+                form.dataset.matchId = match ? match.id : '';
+
+                title.textContent = mode === 'edit' ? 'Modifier la partie' : 'Ajouter une partie';
+                saveBtn.textContent = mode === 'edit' ? 'Enregistrer' : 'Ajouter';
+
+                populateMatchSelects();
+
+                if (match) {
+                    document.getElementById('matchPlayedAt').value = toLocalInputValue(match.played_at);
+                    document.getElementById('matchLocation').value = match.location || '';
+                    document.getElementById('team1Player1').value = match.team1.p1.id;
+                    document.getElementById('team1Player2').value = match.team1.p2.id;
+                    document.getElementById('team2Player1').value = match.team2.p1.id;
+                    document.getElementById('team2Player2').value = match.team2.p2.id;
+                } else {
+                    document.getElementById('matchPlayedAt').value = toLocalInputValue();
+                }
+
+                modal.classList.add('show');
+            };
+
+            closeBtn.addEventListener('click', closeModal);
+            cancelBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) closeModal();
+            });
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const payload = {
+                    played_at: document.getElementById('matchPlayedAt').value,
+                    location: document.getElementById('matchLocation').value.trim(),
+                    team1: {
+                        p1: document.getElementById('team1Player1').value,
+                        p2: document.getElementById('team1Player2').value
+                    },
+                    team2: {
+                        p1: document.getElementById('team2Player1').value,
+                        p2: document.getElementById('team2Player2').value
+                    }
+                };
+
+                const allIds = [payload.team1.p1, payload.team1.p2, payload.team2.p1, payload.team2.p2];
+                const uniqueIds = new Set(allIds);
+
+                if (!payload.played_at || !payload.location) {
+                    showToast('La date et le lieu sont obligatoires.');
+                    return;
+                }
+
+                if (uniqueIds.size !== 4) {
+                    showToast('Chaque joueur doit être unique dans la partie.');
+                    return;
+                }
+
+                try {
+                    const mode = form.dataset.mode;
+                    const matchId = form.dataset.matchId ? Number(form.dataset.matchId) : null;
+                    await saveMatch(payload, mode === 'edit' ? matchId : null);
+                    await loadMatches();
+                    showToast(mode === 'edit' ? 'Partie mise à jour.' : 'Partie créée.');
+                    closeModal();
+                } catch (error) {
+                    showToast(error.message || 'Erreur lors de la sauvegarde.');
+                }
+            });
+        }
+
+        function renderRoundsRows(count, existingRounds = []) {
+            const container = document.getElementById('roundsContainer');
+            container.innerHTML = '';
+
+            for (let i = 1; i <= count; i += 1) {
+                const existing = existingRounds.find(r => Number(r.round_index) === i) || {};
+                const row = document.createElement('div');
+                row.className = 'rounds-row';
+                row.dataset.roundIndex = i;
+                row.innerHTML = `
+                    <div class="round-index">Manche ${i}</div>
+                    <input type="number" min="0" value="${existing.team1_score ?? ''}" placeholder="Score équipe 1" required>
+                    <input type="number" min="0" value="${existing.team2_score ?? ''}" placeholder="Score équipe 2" required>
+                `;
+                container.appendChild(row);
+            }
+        }
+
+        function setupScoresModal() {
+            const modal = document.getElementById('scoresModal');
+            const closeBtn = document.getElementById('closeScoresModalBtn');
+            const cancelBtn = document.getElementById('cancelScoresModalBtn');
+            const form = document.getElementById('scoresForm');
+            const roundsCountInput = document.getElementById('roundsCount');
+            const addRoundBtn = document.getElementById('addRoundBtn');
+            const removeRoundBtn = document.getElementById('removeRoundBtn');
+            const teamsLabel = document.getElementById('scoresTeams');
+            const summary = document.getElementById('scoresSummary');
+
+            function closeModal() {
+                modal.classList.remove('show');
+                form.reset();
+                form.dataset.matchId = '';
+                teamsLabel.textContent = '';
+                summary.style.display = 'none';
+                summary.innerHTML = '';
+                renderRoundsRows(1);
+            }
+
+            window.openScoresModal = function openScoresModal(match) {
+                form.dataset.matchId = match.id;
+                teamsLabel.textContent = `Équipe 1 : ${getMatchTeamLabel(match.team1)} | Équipe 2 : ${getMatchTeamLabel(match.team2)}`;
+                roundsCountInput.value = match.rounds_played && match.rounds_played > 0 ? match.rounds_played : 1;
+                renderRoundsRows(Number(roundsCountInput.value), match.rounds || []);
+                if (match.rounds && match.rounds.length) {
+                    const totals = summarizeRounds(match.rounds);
+                    updateScoresSummary(totals, getMatchTeamLabel(match.team1), getMatchTeamLabel(match.team2));
+                } else {
+                    summary.style.display = 'none';
+                    summary.innerHTML = '';
+                }
+                modal.classList.add('show');
+            };
+
+            closeBtn.addEventListener('click', closeModal);
+            cancelBtn.addEventListener('click', closeModal);
+            modal.addEventListener('click', (event) => {
+                if (event.target === modal) closeModal();
+            });
+
+            addRoundBtn.addEventListener('click', () => {
+                const nextCount = Number(roundsCountInput.value) + 1;
+                roundsCountInput.value = nextCount;
+                renderRoundsRows(nextCount);
+            });
+
+            removeRoundBtn.addEventListener('click', () => {
+                const current = Number(roundsCountInput.value) || 1;
+                const nextCount = Math.max(1, current - 1);
+                roundsCountInput.value = nextCount;
+                renderRoundsRows(nextCount);
+            });
+
+            roundsCountInput.addEventListener('change', () => {
+                const value = Math.max(1, Number(roundsCountInput.value) || 1);
+                roundsCountInput.value = value;
+                renderRoundsRows(value);
+            });
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const matchId = Number(form.dataset.matchId);
+                const rows = Array.from(document.querySelectorAll('#roundsContainer .rounds-row'));
+                const rounds = rows.map((row, index) => {
+                    const inputs = row.querySelectorAll('input');
+                    return {
+                        round_index: index + 1,
+                        team1_score: Number(inputs[0].value),
+                        team2_score: Number(inputs[1].value)
+                    };
+                });
+
+                if (rounds.some(round => !Number.isInteger(round.team1_score) || round.team1_score < 0 || !Number.isInteger(round.team2_score) || round.team2_score < 0)) {
+                    showToast('Les scores doivent être des entiers positifs.');
+                    return;
+                }
+
+                try {
+                    await saveMatchRounds(matchId, rounds);
+                    const updatedMatch = await fetchMatchDetails(matchId);
+                    const index = matches.findIndex(match => match.id === matchId);
+                    if (index !== -1) {
+                        matches[index] = { ...matches[index], ...updatedMatch };
+                    }
+                    if (updatedMatch.rounds && updatedMatch.rounds.length) {
+                        const totals = summarizeRounds(updatedMatch.rounds);
+                        updateScoresSummary(totals, getMatchTeamLabel(updatedMatch.team1), getMatchTeamLabel(updatedMatch.team2));
+                    }
+                    renderMatches();
+                    showToast('Scores enregistrés.');
+                    closeModal();
+                } catch (error) {
+                    showToast(error.message || 'Erreur lors de la sauvegarde des scores.');
+                }
+            });
+        }
+
+        function setupMatchActions() {
+            const grid = document.getElementById('matchesGrid');
+
+            grid.addEventListener('click', (event) => {
+                const editBtn = event.target.closest('[data-action="edit-match"]');
+                const deleteBtn = event.target.closest('[data-action="delete-match"]');
+                const scoresBtn = event.target.closest('[data-action="scores-match"]');
+                const copyBtn = event.target.closest('[data-action="copy-match"]');
+                const card = event.target.closest('[data-match-id]');
+
+                if (!card) return;
+                const matchId = Number(card.dataset.matchId);
+                const match = matches.find(item => item.id === matchId);
+
+                if (editBtn && match) {
+                    openMatchModal('edit', match);
+                    return;
+                }
+
+                if (deleteBtn && match) {
+                    const confirmed = confirm('Supprimer cette partie ?');
+                    if (!confirmed) return;
+                    deleteMatch(matchId)
+                        .then(() => loadMatches())
+                        .then(() => showToast('Partie supprimée.'))
+                        .catch(error => showToast(error.message || 'Erreur lors de la suppression.'));
+                    return;
+                }
+
+                if (scoresBtn && match) {
+                    openScoresModal(match);
+                    return;
+                }
+
+                if (copyBtn && match) {
+                    const message = buildMatchWhatsAppMessage(match);
+                    navigator.clipboard.writeText(message)
+                        .then(() => {
+                            showToast('Message copié ! Collez-le dans WhatsApp 📱');
+                        })
+                        .catch(() => {
+                            showToast('Erreur lors de la copie');
+                        });
+                }
+            });
         }
 
         /**
@@ -1827,17 +2573,25 @@ Qui est chaud ? 🔥`;
          */
         async function init() {
             await loadPlayers();
-            renderUpcomingSessions();
-            renderScoresTable();
+            await loadMatches();
+            await loadScores();
 
             setupTableSort();
             setupSearch();
             setupPlayerFilter();
+            setupScoresPagination();
             setupPlayerActions();
             setupModal();
+            setupMatchModal();
+            setupScoresModal();
+            setupMatchActions();
 
             document.getElementById('addPlayerBtn').addEventListener('click', () => {
                 openPlayerModal('create');
+            });
+
+            document.getElementById('addMatchBtn').addEventListener('click', () => {
+                openMatchModal('create');
             });
         }
 

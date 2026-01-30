@@ -68,6 +68,17 @@ En cas d'erreur :
 - `PUT /api/players/:id`
 - `DELETE /api/players/:id`
 
+#### Parties (matches)
+
+- `GET /api/matches`
+- `GET /api/matches/played?limit=10&offset=0&player_id=2`
+- `GET /api/matches/:id`
+- `POST /api/matches`
+- `PUT /api/matches/:id`
+- `DELETE /api/matches/:id`
+- `POST /api/matches/:id/rounds`
+- `DELETE /api/matches/:id/rounds`
+
 ### Exemple de payload (POST/PUT)
 
 ```json
@@ -82,4 +93,4 @@ En cas d'erreur :
 ## Base de données
 
 SQLite locale : `backend/belote.db`.
-La table `players` est auto-créée au démarrage si elle n'existe pas.
+Les tables `players`, `matches` et `match_rounds` sont auto-créées au démarrage si elles n'existent pas.
