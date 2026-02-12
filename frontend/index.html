@@ -611,6 +611,58 @@
             border-top: 1px solid var(--border);
         }
 
+        .partie-footer-a {
+            display: none;
+            background: var(--bg-elevated);
+            border-top: 1px solid var(--border);
+            position: relative;
+            z-index: 2;
+        }
+
+        .primary-action {
+            width: 100%;
+            min-height: 44px;
+            padding: 1rem;
+            background: var(--accent);
+            color: var(--bg-deep);
+            border: none;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            touch-action: manipulation;
+        }
+
+        .secondary-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            border-top: 1px solid var(--border);
+        }
+
+        .secondary-action {
+            min-height: 44px;
+            padding: 0.875rem;
+            background: transparent;
+            color: var(--text-secondary);
+            border: none;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            transition: all 0.2s;
+            touch-action: manipulation;
+        }
+
+        .secondary-action:not(:last-child) {
+            border-right: 1px solid var(--border);
+        }
+
         .manches-info {
             font-size: 0.8rem;
             color: var(--text-muted);
@@ -952,6 +1004,8 @@
             .podium { flex-direction: column; align-items: center; }
             .podium-place { flex-direction: row; gap: 1rem; }
             .podium-bar { display: none; }
+            .partie-footer { display: none; }
+            .partie-footer-a { display: block; }
         }
     
         .players-toolbar {
@@ -1288,38 +1342,22 @@
             }
 
             /* ===== FIX MOBILE CTA - Parties ===== */
-            .partie-actions .btn,
-            .partie-actions .btn-sm {
-                min-height: 44px;
-                min-width: 44px;
-                padding: 0.75rem 1rem;
-                font-size: 0.875rem;
-                touch-action: manipulation;
-            }
-
-            .partie-actions {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 0.75rem;
-                margin-top: 1rem;
-                padding-top: 1rem;
-                border-top: 1px solid var(--border);
+            .partie-footer,
+            .partie-footer-a {
                 position: relative;
                 z-index: 2;
             }
 
-            .partie-actions .btn-primary {
-                grid-column: 1 / -1;
-            }
-
-            .partie-card:hover {
-                transform: none;
-            }
-
+            .primary-action:active,
+            .secondary-action:active,
             .partie-actions .btn:active {
                 transform: scale(0.97);
                 opacity: 0.85;
                 transition: all 0.1s ease;
+            }
+
+            .partie-card:hover {
+                transform: none;
             }
         }
     </style>
@@ -2403,6 +2441,14 @@ Statut: ${isPlayed ? 'Jouee' : 'Planifiee'}`;
                                 <button class="btn btn-secondary btn-sm" data-action="copy-match">Copier</button>
                             </div>
                         </div>
+                        <div class="partie-footer-a">
+                            <button class="primary-action" data-action="scores-match">🧮 Saisir les scores</button>
+                            <div class="secondary-actions">
+                                <button class="secondary-action" data-action="edit-match">✏️ Modifier</button>
+                                <button class="secondary-action" data-action="copy-match">📋 Copier</button>
+                                <button class="secondary-action" data-action="delete-match">🗑️ Suppr.</button>
+                            </div>
+                        </div>
                     </div>
                 `;
             }).join('');
@@ -2967,6 +3013,4 @@ Statut: ${isPlayed ? 'Jouee' : 'Planifiee'}`;
     </script>
 </body>
 </html>
-
-
 
